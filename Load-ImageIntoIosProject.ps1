@@ -14,6 +14,8 @@ Param(
 )
 
 $script:iosResourcesDirectoryName = $iosResources
+$script:image2 = ""
+$script:image3 = ""
 
 function Process-Parameters()
 {
@@ -53,7 +55,6 @@ function Process-Parameters()
     {
         $iosProjectDirectory = Get-Item (Get-Item $iosProject).DirectoryName
         $script:iosResourcesDirectoryName = $iosProjectDirectory.ToString() + "\Resources"
-        Write-Host Hello $script:iosResourcesDirectoryName
     }
 
     return $parametersOk
@@ -71,22 +72,22 @@ function Copy-Images()
         Copy-Item $image $script:iosResourcesDirectoryName
         Write-Host Copied $image to $script:iosResourcesDirectoryName
 
-        $image2 = $image.Substring(0, $image.Length - 4) + "@2x.png"
-        if (Test-Path $image2)
+        $script:image2 = $image.Substring(0, $image.Length - 4) + "@2x.png"
+        if (Test-Path $script:image2)
         {
-            Copy-Item $image2 $script:iosResourcesDirectoryName
-            Write-Host Copied $image2 to $script:iosResourcesDirectoryName
+            Copy-Item $script:image2 $script:iosResourcesDirectoryName
+            Write-Host Copied $script:image2 to $script:iosResourcesDirectoryName
         }
         else
         {
-            Write-Host "Did not find $image2"
+            Write-Host "Did not find $script:image2"
         }
 
-        $image3 = $image.Substring(0, $image.Length - 4) + "@3x.png"
-        if (Test-Path $image3)
+        $script:image3 = $image.Substring(0, $image.Length - 4) + "@3x.png"
+        if (Test-Path $script:image3)
         {
-            Copy-Item $image3 $script:iosResourcesDirectoryName
-            Write-Host Copied $image3 to $script:iosResourcesDirectoryName
+            Copy-Item $script:image3 $script:iosResourcesDirectoryName
+            Write-Host Copied $script:image3 to $script:iosResourcesDirectoryName
         }
         else
         {
@@ -95,10 +96,54 @@ function Copy-Images()
     }
 }
 
+function Add-ImagesToProject()
+{
+    $projectXml = [xml](Get-Content $iosProject)
+
+    $imageFile = Get-Item $image
+    $filenameIndex = $imageFile.FullName.LastIndexOf("\") + 1
+    $filename = "Resources\" + $imageFile.FullName.Substring($filenameIndex)
+    if (Test-Path $script:image2)
+    {
+        $filename2 = "Resources\" + (Get-Item $script:image2).FullName.Substring($filenameIndex)
+    }
+    if (Test-Path $script:image3)
+    {
+        $filename3 = "Resources\" + (Get-Item $script:image3).FullName.Substring($filenameIndex)
+    }
+
+    $xPath = [string]::Format("//a:BundleResource[@Include='{0}']", $filename)
+
+    $xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
+    $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns);
+    $projectXml.Project.AppendChild($itemGroup);
+
+    $bundleResource = $projectXml.CreateElement("BundleResource", $xmlns);
+    $bundleResource.SetAttribute("Include", $filename);
+    $itemGroup.AppendChild($bundleResource)
+
+    if (Test-Path $script:image2)
+    {
+        $bundleResource2 = $projectXml.CreateElement("BundleResource", $xmlns);
+        $bundleResource2.SetAttribute("Include", $filename2);
+        $itemGroup.AppendChild($bundleResource2)
+    }
+
+    if (Test-Path $script:image3)
+    {
+        $bundleResource3 = $projectXml.CreateElement("BundleResource", $xmlns);
+        $bundleResource3.SetAttribute("Include", $filename3);
+        $itemGroup.AppendChild($bundleResource3)
+    }
+
+    $projectXml.Save($iosProject)
+}
+
 $parametersOk = Process-Parameters
 if ($parametersOk)
 {
     Copy-Images
+    Add-ImagesToProject
 }
 else
 {
