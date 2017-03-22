@@ -112,28 +112,54 @@ function Add-ImagesToProject()
         $filename3 = "Resources\" + (Get-Item $script:image3).FullName.Substring($filenameIndex)
     }
 
-    $xPath = [string]::Format("//a:BundleResource[@Include='{0}']", $filename)
-
     $xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
-    $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns);
-    $projectXml.Project.AppendChild($itemGroup);
+    [System.Xml.XmlNamespaceManager] $nsmgr = $projectXml.NameTable
+    $nsmgr.AddNamespace('a', $xmlns)
 
-    $bundleResource = $projectXml.CreateElement("BundleResource", $xmlns);
-    $bundleResource.SetAttribute("Include", $filename);
-    $itemGroup.AppendChild($bundleResource)
+    $itemGroupXPath = [string]::Format("//a:BundleResource")
+    $firstItemGroupNode = $projectXml.SelectNodes($itemGroupXPath, $nsmgr)[1]
+    [System.Xml.XmlDocument] $itemGroup
+    if ($firstItemGroupNode)
+    {
+        $itemGroup = $firstItemGroupNode.ParentNode
+    }
+    else
+    {
+        $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns);
+        $projectXml.Project.AppendChild($itemGroup);
+    }
+
+    $xPath = [string]::Format("//a:BundleResource[@Include='{0}']", $filename)
+    $node = $projectXml.SelectSingleNode($xPath, $nsmgr)
+    if (!$node)
+    {
+        $bundleResource = $projectXml.CreateElement("BundleResource", $xmlns);
+        $bundleResource.SetAttribute("Include", $filename);
+        $itemGroup.AppendChild($bundleResource)
+    }
 
     if (Test-Path $script:image2)
     {
-        $bundleResource2 = $projectXml.CreateElement("BundleResource", $xmlns);
-        $bundleResource2.SetAttribute("Include", $filename2);
-        $itemGroup.AppendChild($bundleResource2)
+        $xPath2 = [string]::Format("//a:BundleResource[@Include='{0}']", $filename2)
+        $node2 = $projectXml.SelectSingleNode($xPath2, $nsmgr)
+        if (!$node2)
+        {
+            $bundleResource2 = $projectXml.CreateElement("BundleResource", $xmlns);
+            $bundleResource2.SetAttribute("Include", $filename2);
+            $itemGroup.AppendChild($bundleResource2)
+        }
     }
 
     if (Test-Path $script:image3)
     {
-        $bundleResource3 = $projectXml.CreateElement("BundleResource", $xmlns);
-        $bundleResource3.SetAttribute("Include", $filename3);
-        $itemGroup.AppendChild($bundleResource3)
+        $xPath3 = [string]::Format("//a:BundleResource[@Include='{0}']", $filename3)
+        $node3 = $projectXml.SelectSingleNode($xPath3, $nsmgr)
+        if (!$node3)
+        {
+            $bundleResource3 = $projectXml.CreateElement("BundleResource", $xmlns);
+            $bundleResource3.SetAttribute("Include", $filename3);
+            $itemGroup.AppendChild($bundleResource3)
+        }
     }
 
     $projectXml.Save($iosProject)
