@@ -13,9 +13,9 @@ Param(
     [bool]$move = $False
 )
 
-$script:iosResourcesDirectoryName = $iosResources
-$script:image2 = ""
-$script:image3 = ""
+[string]$script:iosResourcesDirectoryName = $iosResources
+[string]$script:image2
+[string]$script:image3
 
 function Process-Parameters()
 {
@@ -43,12 +43,12 @@ function Process-Parameters()
         Write-Error "$iosProject is not a .csproj"
     }
 
-    if (!([string]::IsNullOrEmpty($iosResourcesFolder)))
+    if (!([string]::IsNullOrEmpty($iosResources)))
     {
-        if (!(Test-Path $iosResourcesFolder))
+        if (!(Test-Path $iosResources))
         {
             $parametersOk = $False
-            Write-Error "Did not find $iosResourcesFolder"
+            Write-Error "Did not find $iosResources"
         }
     }
     elseif (Test-Path $iosProject)
@@ -60,39 +60,50 @@ function Process-Parameters()
     return $parametersOk
 }
 
-function Copy-Images()
+function Get-Filename([string]$filenameWithPath)
+{
+    $filenameIndex = $filenameWithPath.LastIndexOf("\") + 1
+    return $filenameWithPath.Substring($filenameIndex)
+}
+
+function Copy-Image([string]$source, [string]$destination)
 {
     if ($move)
     {
-        Move-Item $image $script:iosResourcesDirectoryName
-        Write-Host Moved $image to $script:iosResourcesDirectoryName
+        Move-Item $source $destination -Force
+        Write-Output "Moved $($source) to $($destination)"
     }
     else
     {
-        Copy-Item $image $script:iosResourcesDirectoryName
-        Write-Host Copied $image to $script:iosResourcesDirectoryName
+        Copy-Item $source $destination
+        Write-Output "Copied $($source) to $($destination)"
+    }
+}
 
-        $script:image2 = $image.Substring(0, $image.Length - 4) + "@2x.png"
-        if (Test-Path $script:image2)
-        {
-            Copy-Item $script:image2 $script:iosResourcesDirectoryName
-            Write-Host Copied $script:image2 to $script:iosResourcesDirectoryName
-        }
-        else
-        {
-            Write-Host "Did not find $script:image2"
-        }
+function Copy-Images()
+{
+    Copy-Image $image $script:iosResourcesDirectoryName
 
-        $script:image3 = $image.Substring(0, $image.Length - 4) + "@3x.png"
-        if (Test-Path $script:image3)
-        {
-            Copy-Item $script:image3 $script:iosResourcesDirectoryName
-            Write-Host Copied $script:image3 to $script:iosResourcesDirectoryName
-        }
-        else
-        {
-            Write-Host "Did not find $image3"
-        }
+    $script:image2 = $image.Substring(0, $image.Length - 4) + "@2x.png"
+    if (Test-Path $script:image2)
+    {
+        Copy-Image $script:image2 $script:iosResourcesDirectoryName
+        $script:image2 = $script:iosResourcesDirectoryName + "\" + (Get-Filename $script:image2)
+    }
+    else
+    {
+        Write-Output "Did not find $script:image2"
+    }
+
+    $script:image3 = $image.Substring(0, $image.Length - 4) + "@3x.png"
+    if (Test-Path $script:image3)
+    {
+        Copy-Image $script:image3 $script:iosResourcesDirectoryName
+        $script:image3 = $script:iosResourcesDirectoryName + "\" + (Get-Filename $script:image3)
+    }
+    else
+    {
+        Write-Output "Did not find $script:image3"
     }
 }
 
@@ -100,16 +111,14 @@ function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $iosProject)
 
-    $imageFile = Get-Item $image
-    $filenameIndex = $imageFile.FullName.LastIndexOf("\") + 1
-    $filename = "Resources\" + $imageFile.FullName.Substring($filenameIndex)
+    $filename = "Resources\" + (Get-Filename $image)
     if (Test-Path $script:image2)
     {
-        $filename2 = "Resources\" + (Get-Item $script:image2).FullName.Substring($filenameIndex)
+        $filename2 = "Resources\" + (Get-Filename $script:image2)
     }
     if (Test-Path $script:image3)
     {
-        $filename3 = "Resources\" + (Get-Item $script:image3).FullName.Substring($filenameIndex)
+        $filename3 = "Resources\" + (Get-Filename $script:image3)
     }
 
     $xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
@@ -170,6 +179,7 @@ if ($parametersOk)
 {
     Copy-Images
     Add-ImagesToProject
+    # TODO: "Include" in STDOUT
 }
 else
 {
