@@ -14,8 +14,8 @@ Param(
 )
 
 [string]$script:iosResourcesDirectoryName = $iosResources
-[string]$script:image2
-[string]$script:image3
+[string]$script:image2 = ""
+[string]$script:image3 = ""
 
 function Process-Parameters()
 {
@@ -80,7 +80,7 @@ function Copy-Image([string]$source, [string]$destination)
     }
 }
 
-function Copy-Images()
+function Copy-ImagesToResources()
 {
     Copy-Image $image $script:iosResourcesDirectoryName
 
@@ -135,16 +135,18 @@ function Add-ImagesToProject()
     else
     {
         $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns);
-        $projectXml.Project.AppendChild($itemGroup);
+        $x = $projectXml.Project.AppendChild($itemGroup);
     }
 
+    // TODO: refactor
     $xPath = [string]::Format("//a:BundleResource[@Include='{0}']", $filename)
     $node = $projectXml.SelectSingleNode($xPath, $nsmgr)
     if (!$node)
     {
         $bundleResource = $projectXml.CreateElement("BundleResource", $xmlns);
         $bundleResource.SetAttribute("Include", $filename);
-        $itemGroup.AppendChild($bundleResource)
+        $x = $itemGroup.AppendChild($bundleResource)
+        Write-Output "Added $(Get-Filename $filename) to $($iosProject)"
     }
 
     if (Test-Path $script:image2)
@@ -155,7 +157,8 @@ function Add-ImagesToProject()
         {
             $bundleResource2 = $projectXml.CreateElement("BundleResource", $xmlns);
             $bundleResource2.SetAttribute("Include", $filename2);
-            $itemGroup.AppendChild($bundleResource2)
+            $x = $itemGroup.AppendChild($bundleResource2)
+            Write-Output "Added $(Get-Filename $script:image2) to $($iosProject)"
         }
     }
 
@@ -167,7 +170,8 @@ function Add-ImagesToProject()
         {
             $bundleResource3 = $projectXml.CreateElement("BundleResource", $xmlns);
             $bundleResource3.SetAttribute("Include", $filename3);
-            $itemGroup.AppendChild($bundleResource3)
+            $x = $itemGroup.AppendChild($bundleResource3)
+            Write-Output "Added $(Get-Filename $script:image3) to $($iosProject)"
         }
     }
 
@@ -177,9 +181,8 @@ function Add-ImagesToProject()
 $parametersOk = Process-Parameters
 if ($parametersOk)
 {
-    Copy-Images
+    Copy-ImagesToResources
     Add-ImagesToProject
-    # TODO: "Include" in STDOUT
 }
 else
 {
