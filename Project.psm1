@@ -1,16 +1,15 @@
 ﻿$xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
 
-function Load-Namespace([xml]$projectXml)
+function Get-Namespace([xml]$projectXml)
 {
     [System.Xml.XmlNamespaceManager]$nsmgr = $projectXml.NameTable
     $nsmgr.AddNamespace("a", $xmlns)
     ,$nsmgr
 }
 
-function Get-BundleResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr)
+function Get-ItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr, [string]$xPath)
 {
-    $itemGroupXPath = "//a:BundleResource"
-    $firstItemGroupNode = $projectXml.SelectNodes($itemGroupXPath, $nsmgr)[1]
+    $firstItemGroupNode = $projectXml.SelectNodes($xPath, $nsmgr)[1]
     [System.Xml.XmlDocument]$itemGroup
     if ($firstItemGroupNode)
     {
@@ -21,7 +20,22 @@ function Get-BundleResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceM
         $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns)
         $x = $projectXml.Project.AppendChild($itemGroup)
     }
-    ,$itemGroup # Why doesn't this work?
+    Write-Debug $itemGroup.GetType()
+    ,$itemGroup
+}
+
+function Get-BundleResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr)
+{
+    $itemGroup = Get-ItemGroup $projectXml $nsmgr "//a:BundleResource"
+    Write-Debug $itemGroup.GetType() # System.Object[] not System.Xml.XmlElement ???
+    ,$itemGroup
+}
+
+function Get-AndroidResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr)
+{
+    $itemGroup = Get-ItemGroup $projectXml $nsmgr "//a:AndroidResource"
+    Write-Host $itemGroup.GetType() # System.Object[] not System.Xml.XmlElement ???
+    ,$itemGroup
 }
 
 function Add-BundleResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr, [System.Xml.XmlElement]$itemGroup, [string]$filename, [string]$projectName)
@@ -52,10 +66,10 @@ function Add-AndroidResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$
     }
 }
 
-. .\FileSystem.ps1
-#Import-Module .\'FileSystem.psm1'
+Import-Module .\'FileSystem.psm1'
 
-#Export-ModuleMember -Function "Load-Namespace"
-#Export-ModuleMember -Function "Get-BundleResourceItemGroup"
-#Export-ModuleMember -Function "Add-BundleResource"
-#Export-ModuleMember -Function "Add-AndroidResource"
+Export-ModuleMember -Function "Get-Namespace"
+Export-ModuleMember -Function "Get-BundleResourceItemGroup"
+Export-ModuleMember -Function "Get-AndroidResourceItemGroup"
+Export-ModuleMember -Function "Add-BundleResource"
+Export-ModuleMember -Function "Add-AndroidResource"

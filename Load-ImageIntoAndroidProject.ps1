@@ -180,13 +180,12 @@ function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $androidProject)
 
-    $nsmgr = Load-Namespace $projectXml
+    $nsmgr = Get-Namespace $projectXml
 
-    #$itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
-    #Write-Host $itemGroup.GetType()
-    $itemGroupXPath = "//a:AndroidResource"
-    $firstItemGroupNode = $projectXml.SelectNodes($itemGroupXPath, $nsmgr)[1]
-    [System.Xml.XmlElement]$itemGroup
+    #$itemGroup = Get-AndroidResourceItemGroup $projectXml $nsmgr
+    #Write-Debug $itemGroup.GetType()
+    $firstItemGroupNode = $projectXml.SelectNodes("//a:AndroidResource", $nsmgr)[1]
+    [System.Xml.XmlDocument]$itemGroup
     if ($firstItemGroupNode)
     {
         $itemGroup = $firstItemGroupNode.ParentNode
@@ -225,10 +224,8 @@ function Add-ImagesToProject()
     $projectXml.Save($androidProject)
 }
 
-. .\FileSystem.ps1
-. .\Project.ps1
-#Import-Module -Name .\'FileSystem.psm1' -Verbose
-#Import-Module -Name .\'Project.psm1' -Verbose
+Import-Module -Name .\'FileSystem.psm1' # -Verbose -Force
+Import-Module -Name .\'Project.psm1' # -Verbose -Force
 
 $parametersOk = Load-Parameters
 if ($parametersOk)

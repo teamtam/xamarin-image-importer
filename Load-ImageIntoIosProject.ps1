@@ -93,12 +93,11 @@ function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $iosProject)
 
-    $nsmgr = Load-Namespace $projectXml
+    $nsmgr = Get-Namespace $projectXml
 
     #$itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
-    #Write-Host $itemGroup.GetType()
-    $itemGroupXPath = "//a:BundleResource"
-    $firstItemGroupNode = $projectXml.SelectNodes($itemGroupXPath, $nsmgr)[1]
+    #Write-Debug $itemGroup.GetType()
+    $firstItemGroupNode = $projectXml.SelectNodes("//a:BundleResource", $nsmgr)[1]
     [System.Xml.XmlElement]$itemGroup
     if ($firstItemGroupNode)
     {
@@ -123,10 +122,8 @@ function Add-ImagesToProject()
     $projectXml.Save($iosProject)
 }
 
-. .\FileSystem.ps1
-. .\Project.ps1
-#Import-Module -Name .\'FileSystem.psm1' -Verbose
-#Import-Module -Name .\'Project.psm1' -Verbose
+Import-Module -Name .\'FileSystem.psm1' # -Verbose -Force
+Import-Module -Name .\'Project.psm1' # -Verbose -Force
 
 $parametersOk = Load-Parameters
 if ($parametersOk)

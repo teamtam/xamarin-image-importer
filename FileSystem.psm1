@@ -34,5 +34,6 @@ function Copy-ImageAndRename([string]$source, [string]$destination, [string]$ren
     }
 }
 
-#Export-ModuleMember -Function 'Get-Filename'
-#Export-ModuleMember -Function 'Copy-Image'
+Export-ModuleMember -Function 'Get-Filename'
+Export-ModuleMember -Function 'Copy-Image'
+Export-ModuleMember -Function 'Copy-ImageAndRename'
