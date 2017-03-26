@@ -34,7 +34,21 @@ function Add-BundleResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$n
         $bundleResource = $projectXml.CreateElement("BundleResource", $xmlns);
         $bundleResource.SetAttribute("Include", $localFilename);
         $x = $itemGroup.AppendChild($bundleResource)
-        Write-Output "Added $(Get-Filename $localFilename) to $($projectName)"
+        Write-Output "Added $($localFilename) to $($projectName)"
+    }
+}
+
+function Add-AndroidResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr, [System.Xml.XmlElement]$itemGroup, [string]$filename, [string]$projectName)
+{
+    $localFilename = $filename.Substring($filename.IndexOf("Resources\"))
+    $xPath = [string]::Format("//a:AndroidResource[@Include='{0}']", $localFilename)
+    $node = $projectXml.SelectSingleNode($xPath, $nsmgr)
+    if (!$node)
+    {
+        $androidResource = $projectXml.CreateElement("AndroidResource", $xmlns);
+        $androidResource.SetAttribute("Include", $localFilename);
+        $x = $itemGroup.AppendChild($androidResource)
+        Write-Output "Added $($localFilename) to $($projectName)"
     }
 }
 
@@ -44,3 +58,4 @@ function Add-BundleResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$n
 #Export-ModuleMember -Function "Load-Namespace"
 #Export-ModuleMember -Function "Get-BundleResourceItemGroup"
 #Export-ModuleMember -Function "Add-BundleResource"
+#Export-ModuleMember -Function "Add-AndroidResource"
