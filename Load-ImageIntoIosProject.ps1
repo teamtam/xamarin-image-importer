@@ -63,30 +63,13 @@ function Load-Parameters()
 
 function Copy-ImagesToResources()
 {
-    Copy-Image $image $script:iosResourcesDirectoryName $move
-    $script:iosImage1 = $script:iosResourcesDirectoryName + "\" + (Get-Filename $script:iosImage1)
+    $script:iosImage1 = Copy-Image $image $script:iosResourcesDirectoryName $move
 
     $script:iosImage2 = $image.Substring(0, $image.Length - 4) + "@2x.png"
-    if (Test-Path $script:iosImage2)
-    {
-        Copy-Image $script:iosImage2 $script:iosResourcesDirectoryName $move
-        $script:iosImage2 = $script:iosResourcesDirectoryName + "\" + (Get-Filename $script:iosImage2)
-    }
-    else
-    {
-        Write-Output "Did not find $script:iosImage2"
-    }
+    $script:iosImage2 = Copy-Image $script:iosImage2 $script:iosResourcesDirectoryName $move
 
     $script:iosImage3 = $image.Substring(0, $image.Length - 4) + "@3x.png"
-    if (Test-Path $script:iosImage3)
-    {
-        Copy-Image $script:iosImage3 $script:iosResourcesDirectoryName $move
-        $script:iosImage3 = $script:iosResourcesDirectoryName + "\" + (Get-Filename $script:iosImage3)
-    }
-    else
-    {
-        Write-Output "Did not find $script:iosImage3"
-    }
+    $script:iosImage3 = Copy-Image $script:iosImage3 $script:iosResourcesDirectoryName $move
 }
 
 function Add-ImagesToProject()

@@ -6,31 +6,63 @@
 
 function Copy-Image([string]$source, [string]$destination, [bool]$move)
 {
-    if ($move)
+    if (Test-Path $destination)
     {
-        Move-Item $source $destination -Force
-        Write-Output "Moved $($source) to $($destination)"
+        if (Test-Path $source)
+        {
+            if ($move)
+            {
+                Move-Item $source $destination -Force
+                Write-Information "Moved $($source) to $($destination)" -InformationAction Continue
+            }
+            else
+            {
+                Copy-Item $source $destination
+                Write-Information "Copied $($source) to $($destination)" -InformationAction Continue
+            }
+            $newImage = $destination + "\" + (Get-Filename $source)
+            $newImage
+        }
+        else
+        {
+            Write-Verbose "Did not find $source"
+        }
     }
     else
     {
-        Copy-Item $source $destination
-        Write-Output "Copied $($source) to $($destination)"
+        Write-Verbose "Did not find $destination"
     }
 }
 
 function Copy-ImageAndRename([string]$source, [string]$destination, [string]$renameTo, [bool]$move)
 {
-    if ($move)
+    if (Test-Path $destination)
     {
-        Move-Item $source $destination -Force
-        Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
-        Write-Output "Moved $($source) to $($destination)"
+        if (Test-Path $source)
+        {
+            if ($move)
+            {
+                Move-Item $source $destination -Force
+                Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
+                Write-Information "Moved $($source) to $($destination)" -InformationAction Continue
+            }
+            else
+            {
+                Copy-Item $source $destination
+                Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
+                Write-Information "Copied $($source) to $($destination)" -InformationAction Continue
+            }
+            $newImage = $destination + "\" + (Get-Filename $renameTo)
+            $newImage
+        }
+        else
+        {
+            Write-Verbose "Did not find $source"
+        }
     }
     else
     {
-        Copy-Item $source $destination
-        Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
-        Write-Output "Copied $($source) to $($destination)"
+        Write-Verbose "Did not find $destination"
     }
 }
 

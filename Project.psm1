@@ -48,7 +48,7 @@ function Add-BundleResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$n
         $bundleResource = $projectXml.CreateElement("BundleResource", $xmlns);
         $bundleResource.SetAttribute("Include", $localFilename);
         $x = $itemGroup.AppendChild($bundleResource)
-        Write-Output "Added $($localFilename) to $($projectName)"
+        Write-Information "Added $($localFilename) to $($projectName)" -InformationAction Continue
     }
 }
 
@@ -62,7 +62,7 @@ function Add-AndroidResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$
         $androidResource = $projectXml.CreateElement("AndroidResource", $xmlns);
         $androidResource.SetAttribute("Include", $localFilename);
         $x = $itemGroup.AppendChild($androidResource)
-        Write-Output "Added $($localFilename) to $($projectName)"
+        Write-Information "Added $($localFilename) to $($projectName)" -InformationAction Continue
     }
 }
 
