@@ -34,7 +34,7 @@ function Get-BundleResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceM
 function Get-AndroidResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr)
 {
     $itemGroup = Get-ItemGroup $projectXml $nsmgr "//a:AndroidResource"
-    Write-Host $itemGroup.GetType() # System.Object[] not System.Xml.XmlElement ???
+    Write-Debug $itemGroup.GetType() # System.Object[] not System.Xml.XmlElement ???
     ,$itemGroup
 }
 

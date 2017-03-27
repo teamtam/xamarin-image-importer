@@ -23,13 +23,13 @@ function Copy-ImageAndRename([string]$source, [string]$destination, [string]$ren
     if ($move)
     {
         Move-Item $source $destination -Force
-        Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + $renameTo) -Force
+        Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
         Write-Output "Moved $($source) to $($destination)"
     }
     else
     {
         Copy-Item $source $destination
-        Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + $renameTo) -Force
+        Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
         Write-Output "Copied $($source) to $($destination)"
     }
 }
