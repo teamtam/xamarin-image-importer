@@ -51,13 +51,19 @@ function Test-Parameters()
 
 function Copy-ImagesToResources()
 {
-    $script:iosImage1 = Copy-Image $image $script:iosResourcesDirectoryName $move
+    [CmdletBinding()]
+    Param(
+        [Parameter()]
+        [switch]$move
+    )
+
+    $script:iosImage1 = Copy-Image $image $script:iosResourcesDirectoryName -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:iosImage2 = $image.Substring(0, $image.Length - 4) + "@2x.png"
-    $script:iosImage2 = Copy-Image $script:iosImage2 $script:iosResourcesDirectoryName $move
+    $script:iosImage2 = Copy-Image $script:iosImage2 $script:iosResourcesDirectoryName -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:iosImage3 = $image.Substring(0, $image.Length - 4) + "@3x.png"
-    $script:iosImage3 = Copy-Image $script:iosImage3 $script:iosResourcesDirectoryName $move
+    $script:iosImage3 = Copy-Image $script:iosImage3 $script:iosResourcesDirectoryName -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 }
 
 function Add-ImagesToProject()
@@ -96,10 +102,10 @@ function Add-XamarinIosImage()
 {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory=$True, Position=1)]
         [string]$image,
 	
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory=$True, Position=2)]
         [string]$iosProject,
 
         [Parameter(Mandatory=$False)]
@@ -112,7 +118,7 @@ function Add-XamarinIosImage()
     $parametersOk = Test-Parameters
     if ($parametersOk)
     {
-        Copy-ImagesToResources
+        Copy-ImagesToResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         Add-ImagesToProject
     }
 }

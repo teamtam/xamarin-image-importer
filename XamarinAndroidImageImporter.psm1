@@ -49,29 +49,35 @@ function Test-Parameters()
 
 function Copy-ImagesToResources()
 {
+    [CmdletBinding()]
+    Param(
+        [Parameter()]
+        [switch]$move
+    )
+
     $script:androidImageL = $image.Substring(0, $image.Length - 4) + "ldpi.png"
     $androidDirectoryL = Join-Path $androidResourcesDirectoryName "drawable-ldpi"
-    $script:androidImageL = Copy-ImageAndRename $script:androidImageL $androidDirectoryL $image $move
+    $script:androidImageL = Copy-ImageAndRename $script:androidImageL $androidDirectoryL $image -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:androidImageM = $image.Substring(0, $image.Length - 4) + "mdpi.png"
     $androidDirectoryM = Join-Path $androidResourcesDirectoryName "drawable-mdpi"
-    $script:androidImageM = Copy-ImageAndRename $script:androidImageM $androidDirectoryM $image $move
+    $script:androidImageM = Copy-ImageAndRename $script:androidImageM $androidDirectoryM $image -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:androidImageH = $image.Substring(0, $image.Length - 4) + "hdpi.png"
     $androidDirectoryH = Join-Path $androidResourcesDirectoryName "drawable-hdpi"
-    $script:androidImageH = Copy-ImageAndRename $script:androidImageH $androidDirectoryH $image $move
+    $script:androidImageH = Copy-ImageAndRename $script:androidImageH $androidDirectoryH $image -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:androidImageX1 = $image.Substring(0, $image.Length - 4) + "xhdpi.png"
     $androidDirectoryX1 = Join-Path $androidResourcesDirectoryName "drawable-xhdpi"
-    $script:androidImageX1 = Copy-ImageAndRename $script:androidImageX1 $androidDirectoryX1 $image $move
+    $script:androidImageX1 = Copy-ImageAndRename $script:androidImageX1 $androidDirectoryX1 $image -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:androidImageX2 = $image.Substring(0, $image.Length - 4) + "xxhdpi.png"
     $androidDirectoryX2 = Join-Path $androidResourcesDirectoryName "drawable-xxhdpi"
-    $script:androidImageX2 = Copy-ImageAndRename $script:androidImageX2 $androidDirectoryX2 $image $move
+    $script:androidImageX2 = Copy-ImageAndRename $script:androidImageX2 $androidDirectoryX2 $image -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:androidImageX3 = $image.Substring(0, $image.Length - 4) + "xxxhdpi.png"
     $androidDirectoryX3 = Join-Path $androidResourcesDirectoryName "drawable-xxxhdpi"
-    $script:androidImageX3 = Copy-ImageAndRename $script:androidImageX3 $androidDirectoryX3 $image $move
+    $script:androidImageX3 = Copy-ImageAndRename $script:androidImageX3 $androidDirectoryX3 $image -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 }
 
 function Add-ImagesToProject()
@@ -125,23 +131,23 @@ function Add-XamarinAndroidImage()
 {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory=$True, Position=1)]
         [string]$image,
 	
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory=$True, Position=2)]
         [string]$androidProject,
 
         [Parameter(Mandatory=$False)]
         [string]$androidResources,
 
-        [Parameter(Mandatory=$False)]
-        [bool]$move = $False
+        [Parameter()]
+        [switch]$move
     )
 
     $parametersOk = Test-Parameters
     if ($parametersOk)
     {
-        Copy-ImagesToResources
+        Copy-ImagesToResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         Add-ImagesToProject
     }
 }

@@ -5,7 +5,7 @@ function Add-XamarinImages()
 {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$True)]
+        [Parameter(Mandatory=$True, Position=1)]
         [string]$images,
 
         [Parameter(Mandatory=$False)]
@@ -20,8 +20,8 @@ function Add-XamarinImages()
         [Parameter(Mandatory=$False)]
         [string]$androidResources,
 
-        [Parameter(Mandatory=$False)]
-        [bool]$move = $False
+        [Parameter()]
+        [switch]$move
     )
 
     if ([string]::IsNullOrEmpty($iosProject) -And [string]::IsNullOrEmpty($androidProject))
@@ -47,11 +47,11 @@ function Add-XamarinImages()
     Foreach-Object {
         if (![string]::IsNullOrEmpty($iosProject))
         {
-            Add-XamarinIosImage $_ $iosProject $iosResources $move
+            Add-XamarinIosImage $_ $iosProject -iosResources $iosResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         }
         if (![string]::IsNullOrEmpty($androidProject))
         {
-            Add-XamarinAndroidImage $_ $androidProject $androidResources $move
+            Add-XamarinAndroidImage $_ $androidProject -androidResources $androidResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         }
         $done.Add($_, $_)
     }
@@ -78,7 +78,7 @@ function Add-XamarinImages()
             }
             if (!$done.ContainsKey($filename))
             {
-                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $androidProject $androidResources $move
+                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $androidProject -androidResources $androidResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
                 $done.Add($filename, $filename)
             }
         }

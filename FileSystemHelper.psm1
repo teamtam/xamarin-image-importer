@@ -4,8 +4,19 @@
     $filenameWithPath.Substring($filenameIndex)
 }
 
-function Copy-Image([string]$source, [string]$destination, [bool]$move)
+function Copy-Image()
 {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True, Position=1)]
+        [string]$source,
+
+        [Parameter(Mandatory=$True, Position=2)]
+        [string]$destination,
+
+        [Parameter()]
+        [switch]$move
+    )
     if (Test-Path $destination)
     {
         if (Test-Path $source)
@@ -34,8 +45,23 @@ function Copy-Image([string]$source, [string]$destination, [bool]$move)
     }
 }
 
-function Copy-ImageAndRename([string]$source, [string]$destination, [string]$renameTo, [bool]$move)
+function Copy-ImageAndRename()
 {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True, Position=1)]
+        [string]$source,
+
+        [Parameter(Mandatory=$True, Position=2)]
+        [string]$destination,
+
+        [Parameter(Mandatory=$True, Position=3)]
+        [string]$renameTo,
+
+        [Parameter()]
+        [switch]$move
+    )
+
     if (Test-Path $destination)
     {
         if (Test-Path $source)
