@@ -127,6 +127,39 @@ function Add-ImagesToProject()
     $projectXml.Save($androidProject)
 }
 
+<#
+ .Synopsis
+  Copies images with multiple resolutions into correct locations and imports them to a Xamarin.Android project.
+
+ .Description
+  Copies .png images into the correct resolution dependent Resources directory of a Xamarin.Android project and
+  imports them to the .csproj project file so it will be available when viewed in Visual/Xamarin Studio. Images
+  to be imported are by the convention of *ldpi.png, *mdpi.png, *hdpi.png, *xhdpi.png, *xxhdpi.png and
+  *xxxhdpi.png suffixes.
+
+ .Parameter image
+  The name of the final .png in each resolution dependent Resources directory.
+
+ .Parameter androidProject
+  The .csproj of the Xamarin.Android project to import the image(s) into.
+
+ .Parameter androidResources
+  If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
+
+ .Parameter move
+  Moves instead of copies the source image(s).
+
+ .Parameter verbose
+  Shows additional output in the verbose stream of attempts to process an image that did not complete.
+
+ .Example
+  # Run with minimal parameters.
+  Add-XamarinAndroidImage C:\Images\logo.png C:\Source\MyProject.Droid\MyProject.Droid.csproj
+
+ .Example
+  # Run with all optional parameters.
+  Add-XamarinAndroidImage -image C:\Images\logo.png -androidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -androidResources C:\Source\MyProject.Droid\Resources -move -Verbose
+#>
 function Add-XamarinAndroidImage()
 {
     [CmdletBinding()]

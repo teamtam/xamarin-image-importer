@@ -98,6 +98,38 @@ function Add-ImagesToProject()
     $projectXml.Save($iosProject)
 }
 
+<#
+ .Synopsis
+  Copies images with multiple resolutions into correct locations and imports them to a Xamarin.iOS project.
+
+ .Description
+  Copies a .png image into the Resources directory of a Xamarin.iOS project and imports them to the .csproj
+  project file so it will be available when viewed in Visual/Xamarin Studio. If *@2x.png or *@3x.png variants
+  of the image exist, these will be imported as well.
+
+ .Parameter image
+  The .png image to process.
+
+ .Parameter iosProject
+  The .csproj of the Xamarin.iOS project to import the image(s) into.
+
+ .Parameter iosResources
+  If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
+
+ .Parameter move
+  Moves instead of copies the source image(s).
+
+ .Parameter verbose
+  Shows additional output in the verbose stream of attempts to process an image that did not complete.
+
+ .Example
+  # Run with minimal parameters.
+  Add-XamarinIosImage C:\Images\logo.png C:\Source\MyProject.iOS\MyProject.iOS.csproj
+
+ .Example
+  # Run with all optional parameters.
+  Add-XamarinIosImage -image C:\Images\logo.png -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -iosResources C:\Source\MyProject.iOS\Resources -move -Verbose
+#>
 function Add-XamarinIosImage()
 {
     [CmdletBinding()]

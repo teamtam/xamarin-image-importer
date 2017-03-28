@@ -1,6 +1,48 @@
 ﻿Import-Module .\XamarinIosImageImporter.psm1
 Import-Module .\XamarinAndroidImageImporter.psm1
 
+<#
+ .Synopsis
+  Copies images with multiple resolutions into correct locations and imports them to Xamarin iOS/Android projects.
+
+ .Description
+  Copies .png images into the corresponding Resources directory of Xamarin.iOS and Xamarin.Android projects and
+  imports them to the .csproj project files so it will be available when viewed in Visual/Xamarin Studio. If they
+  exist, @2x.png or @3x.png variants of the image will be imported for iOS, and *ldpi.png, *mdpi.png, *hdpi.png,
+  *xhdpi.png, *xxhdpi.png and *xxxhdpi.png will be imported for Android.
+
+ .Parameter images
+  The path to import all .png images from.
+
+ .Parameter iosProject
+  The .csproj of the Xamarin.iOS project to import the image(s) into.
+
+ .Parameter iosResources
+  If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
+
+ .Parameter androidProject
+  The .csproj of the Xamarin.Android project to import the image(s) into.
+
+ .Parameter androidResources
+  If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
+
+ .Parameter move
+  Moves instead of copies the source image(s).
+
+ .Parameter verbose
+  Shows additional output in the verbose stream of attempts to process an image that did not complete.
+
+ .Example
+  # Run for iOS only.
+  Add-XamarinImages C:\Images -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj
+
+  # Run for Android only.
+  Add-XamarinImages C:\Images -androidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj
+
+ .Example
+  # Run for both iOS and Android with all optional parameters.
+  Add-XamarinImages -images C:\Images -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -iosResources C:\Source\MyProject.iOS\Resources -androidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -androidResources C:\Source\MyProject.Droid\Resources -move -Verbose
+#>
 function Add-XamarinImages()
 {
     [CmdletBinding()]
