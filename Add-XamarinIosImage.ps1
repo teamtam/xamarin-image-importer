@@ -18,7 +18,7 @@ Param(
 [string]$script:iosImage2 = ""
 [string]$script:iosImage3 = ""
 
-function Load-Parameters()
+function Test-Parameters()
 {
     $parametersOk = $True
 
@@ -108,7 +108,7 @@ function Add-ImagesToProject()
 Import-Module -Name .\'FileSystem.psm1' # -Verbose -Force
 Import-Module -Name .\'Project.psm1' # -Verbose -Force
 
-$parametersOk = Load-Parameters
+$parametersOk = Test-Parameters
 if ($parametersOk)
 {
     Copy-ImagesToResources
