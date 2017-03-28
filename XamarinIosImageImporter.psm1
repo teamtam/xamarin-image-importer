@@ -1,7 +1,4 @@
-﻿Import-Module .\FileSystemHelper.psm1
-Import-Module .\ProjectHelper.psm1
-
-[string]$script:iosResourcesDirectoryName = $iosResources
+﻿[string]$script:iosResourcesDirectoryName = $iosResources
 [string]$script:iosImage1 = $image
 [string]$script:iosImage2 = ""
 [string]$script:iosImage3 = ""
@@ -70,7 +67,7 @@ function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $iosProject)
 
-    $nsmgr = Get-Namespace $projectXml
+    $nsmgr = Get-XmlNamespace $projectXml
 
     #$itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
     #Write-Debug $itemGroup.GetType()

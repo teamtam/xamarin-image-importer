@@ -1,8 +1,6 @@
-﻿Import-Module .\FileSystemHelper.psm1
+﻿$xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
 
-$xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
-
-function Get-Namespace([xml]$projectXml)
+function Get-XmlNamespace([xml]$projectXml)
 {
     [System.Xml.XmlNamespaceManager]$nsmgr = $projectXml.NameTable
     $nsmgr.AddNamespace("a", $xmlns)
@@ -67,9 +65,3 @@ function Add-AndroidResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$
         Write-Information "Added $($localFilename) to $($projectName)" -InformationAction Continue
     }
 }
-
-Export-ModuleMember -Function "Get-Namespace"
-Export-ModuleMember -Function "Get-BundleResourceItemGroup"
-Export-ModuleMember -Function "Get-AndroidResourceItemGroup"
-Export-ModuleMember -Function "Add-BundleResource"
-Export-ModuleMember -Function "Add-AndroidResource"

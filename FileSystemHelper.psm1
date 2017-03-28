@@ -91,7 +91,3 @@ function Copy-ImageAndRename()
         Write-Verbose "Did not find $destination"
     }
 }
-
-Export-ModuleMember -Function 'Get-Filename'
-Export-ModuleMember -Function 'Copy-Image'
-Export-ModuleMember -Function 'Copy-ImageAndRename'

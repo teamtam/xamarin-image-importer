@@ -1,7 +1,4 @@
-﻿Import-Module .\XamarinIosImageImporter.psm1
-Import-Module .\XamarinAndroidImageImporter.psm1
-
-<#
+﻿<#
  .Synopsis
   Copies images with multiple resolutions into correct locations and imports them to Xamarin iOS/Android projects.
 

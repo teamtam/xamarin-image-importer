@@ -1,7 +1,4 @@
-﻿Import-Module .\FileSystemHelper.psm1
-Import-Module .\ProjectHelper.psm1
-
-[string]$script:androidResourcesDirectoryName = $androidResources
+﻿[string]$script:androidResourcesDirectoryName = $androidResources
 [string]$script:androidImageL = ""
 [string]$script:androidImageM = ""
 [string]$script:androidImageH = ""
@@ -84,7 +81,7 @@ function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $androidProject)
 
-    $nsmgr = Get-Namespace $projectXml
+    $nsmgr = Get-XmlNamespace $projectXml
 
     #$itemGroup = Get-AndroidResourceItemGroup $projectXml $nsmgr
     #Write-Debug $itemGroup.GetType()
