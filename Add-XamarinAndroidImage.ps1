@@ -56,7 +56,7 @@ function Test-Parameters()
     elseif (Test-Path $androidProject)
     {
         $androidProjectDirectory = Get-Item (Get-Item $androidProject).DirectoryName
-        $script:androidResourcesDirectoryName = $androidProjectDirectory.ToString() + "\Resources"
+        $script:androidResourcesDirectoryName = Join-Path $androidProjectDirectory.ToString() "Resources"
     }
 
     return $parametersOk
@@ -65,27 +65,27 @@ function Test-Parameters()
 function Copy-ImagesToResources()
 {
     $script:androidImageL = $image.Substring(0, $image.Length - 4) + "ldpi.png"
-    $androidDirectoryL = $androidResourcesDirectoryName + "\drawable-ldpi"
+    $androidDirectoryL = Join-Path $androidResourcesDirectoryName "drawable-ldpi"
     $script:androidImageL = Copy-ImageAndRename $script:androidImageL $androidDirectoryL $image $move
 
     $script:androidImageM = $image.Substring(0, $image.Length - 4) + "mdpi.png"
-    $androidDirectoryM = $androidResourcesDirectoryName + "\drawable-mdpi"
+    $androidDirectoryM = Join-Path $androidResourcesDirectoryName "drawable-mdpi"
     $script:androidImageM = Copy-ImageAndRename $script:androidImageM $androidDirectoryM $image $move
 
     $script:androidImageH = $image.Substring(0, $image.Length - 4) + "hdpi.png"
-    $androidDirectoryH = $androidResourcesDirectoryName + "\drawable-hdpi"
+    $androidDirectoryH = Join-Path $androidResourcesDirectoryName "drawable-hdpi"
     $script:androidImageH = Copy-ImageAndRename $script:androidImageH $androidDirectoryH $image $move
 
     $script:androidImageX1 = $image.Substring(0, $image.Length - 4) + "xhdpi.png"
-    $androidDirectoryX1 = $androidResourcesDirectoryName + "\drawable-xhdpi"
+    $androidDirectoryX1 = Join-Path $androidResourcesDirectoryName "drawable-xhdpi"
     $script:androidImageX1 = Copy-ImageAndRename $script:androidImageX1 $androidDirectoryX1 $image $move
 
     $script:androidImageX2 = $image.Substring(0, $image.Length - 4) + "xxhdpi.png"
-    $androidDirectoryX2 = $androidResourcesDirectoryName + "\drawable-xxhdpi"
+    $androidDirectoryX2 = Join-Path $androidResourcesDirectoryName "drawable-xxhdpi"
     $script:androidImageX2 = Copy-ImageAndRename $script:androidImageX2 $androidDirectoryX2 $image $move
 
     $script:androidImageX3 = $image.Substring(0, $image.Length - 4) + "xxxhdpi.png"
-    $androidDirectoryX3 = $androidResourcesDirectoryName + "\drawable-xxxhdpi"
+    $androidDirectoryX3 = Join-Path $androidResourcesDirectoryName "drawable-xxxhdpi"
     $script:androidImageX3 = Copy-ImageAndRename $script:androidImageX3 $androidDirectoryX3 $image $move
 }
 

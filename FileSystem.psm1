@@ -20,7 +20,7 @@ function Copy-Image([string]$source, [string]$destination, [bool]$move)
                 Copy-Item $source $destination
                 Write-Information "Copied $($source) to $($destination)" -InformationAction Continue
             }
-            $newImage = $destination + "\" + (Get-Filename $source)
+            $newImage = Join-Path $destination (Get-Filename $source)
             $newImage
         }
         else
@@ -43,16 +43,16 @@ function Copy-ImageAndRename([string]$source, [string]$destination, [string]$ren
             if ($move)
             {
                 Move-Item $source $destination -Force
-                Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
+                Move-Item (Join-Path $destination (Get-Filename $source)) (Join-Path $destination (Get-Filename $renameTo)) -Force
                 Write-Information "Moved $($source) to $($destination)" -InformationAction Continue
             }
             else
             {
                 Copy-Item $source $destination
-                Move-Item ($destination + "\" + (Get-Filename $source)) ($destination + "\" + (Get-Filename $renameTo)) -Force
+                Move-Item (Join-Path $destination (Get-Filename $source)) (Join-Path $destination (Get-Filename $renameTo)) -Force
                 Write-Information "Copied $($source) to $($destination)" -InformationAction Continue
             }
-            $newImage = $destination + "\" + (Get-Filename $renameTo)
+            $newImage = Join-Path $destination + (Get-Filename $renameTo)
             $newImage
         }
         else

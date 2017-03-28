@@ -58,7 +58,7 @@ function Test-Parameters()
     elseif (Test-Path $iosProject)
     {
         $iosProjectDirectory = Get-Item (Get-Item $iosProject).DirectoryName
-        $script:iosResourcesDirectoryName = $iosProjectDirectory.ToString() + "\Resources"
+        $script:iosResourcesDirectoryName = Join-Path $iosProjectDirectory.ToString() "Resources"
     }
 
     return $parametersOk
