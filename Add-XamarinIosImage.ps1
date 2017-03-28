@@ -13,6 +13,9 @@ Param(
     [bool]$move = $False
 )
 
+Import-Module -Name .\'FileSystem.psm1' # -Verbose -Force
+Import-Module -Name .\'Project.psm1' # -Verbose -Force
+
 [string]$script:iosResourcesDirectoryName = $iosResources
 [string]$script:iosImage1 = $image
 [string]$script:iosImage2 = ""
@@ -81,7 +84,6 @@ function Add-ImagesToProject()
     #$itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
     #Write-Debug $itemGroup.GetType()
     $firstItemGroupNode = $projectXml.SelectNodes("//a:BundleResource", $nsmgr)[1]
-    [System.Xml.XmlElement]$itemGroup
     if ($firstItemGroupNode)
     {
         $itemGroup = $firstItemGroupNode.ParentNode
@@ -104,9 +106,6 @@ function Add-ImagesToProject()
 
     $projectXml.Save($iosProject)
 }
-
-Import-Module -Name .\'FileSystem.psm1' # -Verbose -Force
-Import-Module -Name .\'Project.psm1' # -Verbose -Force
 
 $parametersOk = Test-Parameters
 if ($parametersOk)

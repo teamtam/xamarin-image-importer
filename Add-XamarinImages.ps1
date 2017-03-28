@@ -36,15 +36,45 @@ elseif ((![string]::IsNullOrEmpty($androidProject)) -And (!(Test-Path $androidPr
 }
 
 $imagesPath = $images + "\*"
-Get-ChildItem $imagesPath -Include *.png -Exclude *@2x.png, *@3x.png, *dpi.png | 
+$done = @{}
+
+Get-ChildItem $imagesPath -Include *.png -Exclude *@2x.png, *@3x.png, *dpi.png |
 Foreach-Object {
-    $content = Get-Content $_.FullName
     if (![string]::IsNullOrEmpty($iosProject))
     {
-        . .\Load-ImageIntoIosProject.ps1 $_ $iosProject $iosResources $move
+        . .\Add-XamarinIosImage.ps1 $_ $iosProject $iosResources $move
     }
     if (![string]::IsNullOrEmpty($androidProject))
     {
-        . .\Load-ImageIntoAndroidProject.ps1 $_ $androidProject $androidResources $move
+        . .\Add-XamarinAndroidImage.ps1 $_ $androidProject $androidResources $move
+    }
+    $done.Add($_, $_)
+}
+
+if (![string]::IsNullOrEmpty($androidProject))
+{
+    Get-ChildItem $imagesPath -Include *dpi.png |
+    Foreach-Object {
+        if ($_.BaseName.EndsWith("xxxhdpi"))
+        {
+            $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 7) + ".png"
+        }
+        elseif ($_.BaseName.EndsWith("xxhdpi"))
+        {
+            $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 6) + ".png"
+        }
+        elseif ($_.BaseName.EndsWith("xhdpi"))
+        {
+            $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 5) + ".png"
+        }
+        else
+        {
+            $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 4) + ".png"
+        }
+        if (!$done.ContainsKey($filename))
+        {
+            . .\Add-XamarinAndroidImage.ps1 $filename $androidProject $androidResources $move
+            $done.Add($filename, $filename)
+        }
     }
 }
