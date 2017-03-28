@@ -115,10 +115,6 @@ function Add-XamarinIosImage()
         Copy-ImagesToResources
         Add-ImagesToProject
     }
-    else
-    {
-        exit 1
-    }
 }
 
 Export-ModuleMember -Function "Add-XamarinIosImage"

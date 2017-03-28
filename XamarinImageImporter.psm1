@@ -27,17 +27,17 @@ function Add-XamarinImages()
     if ([string]::IsNullOrEmpty($iosProject) -And [string]::IsNullOrEmpty($androidProject))
     {
         Write-Error "No `$iosProject or `$androidProject"
-        exit 1
+        return
     }
     elseif ((![string]::IsNullOrEmpty($iosProject)) -And (!(Test-Path $iosProject)))
     {
         Write-Error "Did not find $iosProject"
-        exit 1
+        return
     }
     elseif ((![string]::IsNullOrEmpty($androidProject)) -And (!(Test-Path $androidProject)))
     {
         Write-Error "Did not find $androidProject"
-        exit 1
+        return
     }
 
     $imagesPath = $images + "\*"
@@ -78,7 +78,7 @@ function Add-XamarinImages()
             }
             if (!$done.ContainsKey($filename))
             {
-                Add-XamarinAndroidImage $filename $androidProject $androidResources $move
+                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $androidProject $androidResources $move
                 $done.Add($filename, $filename)
             }
         }

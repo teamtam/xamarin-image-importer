@@ -144,10 +144,6 @@ function Add-XamarinAndroidImage()
         Copy-ImagesToResources
         Add-ImagesToProject
     }
-    else
-    {
-        exit 1
-    }
 }
 
 Export-ModuleMember -Function "Add-XamarinAndroidImage"

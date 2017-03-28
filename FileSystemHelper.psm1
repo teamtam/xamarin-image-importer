@@ -52,7 +52,7 @@ function Copy-ImageAndRename([string]$source, [string]$destination, [string]$ren
                 Move-Item (Join-Path $destination (Get-Filename $source)) (Join-Path $destination (Get-Filename $renameTo)) -Force
                 Write-Information "Copied $($source) to $($destination)" -InformationAction Continue
             }
-            $newImage = Join-Path $destination + (Get-Filename $renameTo)
+            $newImage = Join-Path $destination (Get-Filename $renameTo)
             $newImage
         }
         else
