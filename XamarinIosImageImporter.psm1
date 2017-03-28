@@ -1,20 +1,5 @@
-﻿[CmdletBinding()]
-Param(
-    [Parameter(Mandatory=$True)]
-    [string]$image,
-	
-    [Parameter(Mandatory=$True)]
-    [string]$iosProject,
-
-    [Parameter(Mandatory=$False)]
-    [string]$iosResources,
-
-    [Parameter(Mandatory=$False)]
-    [bool]$move = $False
-)
-
-Import-Module -Name .\'FileSystem.psm1' # -Verbose -Force
-Import-Module -Name .\'Project.psm1' # -Verbose -Force
+﻿Import-Module .\FileSystemHelper.psm1
+Import-Module .\ProjectHelper.psm1
 
 [string]$script:iosResourcesDirectoryName = $iosResources
 [string]$script:iosImage1 = $image
@@ -107,13 +92,33 @@ function Add-ImagesToProject()
     $projectXml.Save($iosProject)
 }
 
-$parametersOk = Test-Parameters
-if ($parametersOk)
+function Add-XamarinIosImage()
 {
-    Copy-ImagesToResources
-    Add-ImagesToProject
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]
+        [string]$image,
+	
+        [Parameter(Mandatory=$True)]
+        [string]$iosProject,
+
+        [Parameter(Mandatory=$False)]
+        [string]$iosResources,
+
+        [Parameter(Mandatory=$False)]
+        [bool]$move = $False
+    )
+
+    $parametersOk = Test-Parameters
+    if ($parametersOk)
+    {
+        Copy-ImagesToResources
+        Add-ImagesToProject
+    }
+    else
+    {
+        exit 1
+    }
 }
-else
-{
-    exit 1
-}
+
+Export-ModuleMember -Function "Add-XamarinIosImage"

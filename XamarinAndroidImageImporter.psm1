@@ -1,20 +1,5 @@
-﻿[CmdletBinding()]
-Param(
-    [Parameter(Mandatory=$True)]
-    [string]$image,
-	
-    [Parameter(Mandatory=$True)]
-    [string]$androidProject,
-
-    [Parameter(Mandatory=$False)]
-    [string]$androidResources,
-
-    [Parameter(Mandatory=$False)]
-    [bool]$move = $False
-)
-
-Import-Module -Name .\'FileSystem.psm1' # -Verbose -Force
-Import-Module -Name .\'Project.psm1' # -Verbose -Force
+﻿Import-Module .\FileSystemHelper.psm1
+Import-Module .\ProjectHelper.psm1
 
 [string]$script:androidResourcesDirectoryName = $androidResources
 [string]$script:androidImageL = ""
@@ -136,13 +121,33 @@ function Add-ImagesToProject()
     $projectXml.Save($androidProject)
 }
 
-$parametersOk = Test-Parameters
-if ($parametersOk)
+function Add-XamarinAndroidImage()
 {
-    Copy-ImagesToResources
-    Add-ImagesToProject
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]
+        [string]$image,
+	
+        [Parameter(Mandatory=$True)]
+        [string]$androidProject,
+
+        [Parameter(Mandatory=$False)]
+        [string]$androidResources,
+
+        [Parameter(Mandatory=$False)]
+        [bool]$move = $False
+    )
+
+    $parametersOk = Test-Parameters
+    if ($parametersOk)
+    {
+        Copy-ImagesToResources
+        Add-ImagesToProject
+    }
+    else
+    {
+        exit 1
+    }
 }
-else
-{
-    exit 1
-}
+
+Export-ModuleMember -Function "Add-XamarinAndroidImage"
