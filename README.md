@@ -27,7 +27,10 @@ exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, an
 * PowerShell 5.0
 
 ### PowerShell Gallery
-* `Install-Module -Name "XamarinImageImporter"`
+* Option A: install for the current user:  
+  `Install-Module -Name "XamarinImageImporter" -Scope CurrentUser`
+* Option B: run as Administrator to install for all users:  
+  `Install-Module -Name "XamarinImageImporter"`
 
 ### Manual Installation
 * `git clone https://github.com/teamtam/xamarin-image-importer.git`
