@@ -7,22 +7,31 @@ exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, an
 
 ## Usage
 
-### Run for iOS only.
-`Add-XamarinImages C:\Images -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj`
+### Run for iOS only with minimal parameters.
+`Add-XamarinImages C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj`
 
-### Run for Android only
-`Add-XamarinImages C:\Images -androidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj`
+### Run for Android only with minimal parameters.
+`Add-XamarinImages C:\Images -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj`
 
 ### Run for both iOS and Android with all optional parameters.
-`Add-XamarinImages -images C:\Images -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -iosResources C:\Source\MyProject.iOS\Resources -androidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -androidResources C:\Source\MyProject.Droid\Resources -move -Verbose`
+`Add-XamarinImages -Images C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -IosResources C:\Source\MyProject.iOS\Resources -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -AndroidResources C:\Source\MyProject.Droid\Resources -Move -Verbose`
 
-### More detailed documentation can be found through PowerShell `Get-Help` after installation.
+### More detailed documentation can be found through PowerShell 'Get-Help' after installation.
 * `Get-Help Add-XamarinImages`
 * `Get-Help Add-XamarinIosImage`
 * `Get-Help Add-XamarinAndroidImage`
 
-## Requirements
+## Installation
+
+### Requirements
 * PowerShell 5.0
 
-## Installation
-* *Coming soon!*
+### PowerShell Gallery
+* `Install-Module -Name "XamarinImageImporter"`
+
+### Manual Installation
+* `git clone https://github.com/teamtam/xamarin-image-importer.git`
+* Option A: run as is for the current PowerShell session:  
+  `Import-Module .\XamarinImageImporter.psd1`
+* Option B: install the module for the current and future PowerShell sessions:  
+  Copy to a location defined in `$Env:PSModulePath` - [[more info]](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx)
