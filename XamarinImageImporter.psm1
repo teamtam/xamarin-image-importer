@@ -8,74 +8,74 @@
   exist, *@2x.png or *@3x.png variants of the image will be imported for iOS, and *ldpi.png, *mdpi.png, *hdpi.png,
   *xhdpi.png, *xxhdpi.png and *xxxhdpi.png will be imported for Android.
 
- .Parameter images
+ .Parameter Images
   The path to import all .png images from.
 
- .Parameter iosProject
+ .Parameter IosProject
   The .csproj of the Xamarin.iOS project to import the image(s) into.
 
- .Parameter iosResources
+ .Parameter IosResources
   If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
 
- .Parameter androidProject
+ .Parameter AndroidProject
   The .csproj of the Xamarin.Android project to import the image(s) into.
 
- .Parameter androidResources
+ .Parameter AndroidResources
   If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
 
- .Parameter move
+ .Parameter Move
   Moves instead of copies the source image(s).
 
- .Parameter verbose
+ .Parameter Verbose
   Shows additional output in the verbose stream of attempts to process an image that did not complete.
 
  .Example
   # Run for iOS only.
-  Add-XamarinImages C:\Images -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj
+  Add-XamarinImages C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj
 
   # Run for Android only.
-  Add-XamarinImages C:\Images -androidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj
+  Add-XamarinImages C:\Images -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj
 
  .Example
   # Run for both iOS and Android with all optional parameters.
-  Add-XamarinImages -images C:\Images -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -iosResources C:\Source\MyProject.iOS\Resources -androidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -androidResources C:\Source\MyProject.Droid\Resources -move -Verbose
+  Add-XamarinImages -Images C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -IosResources C:\Source\MyProject.iOS\Resources -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -AndroidResources C:\Source\MyProject.Droid\Resources -Move -Verbose
 #>
 function Add-XamarinImages()
 {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True, Position=1)]
-        [string]$images,
+        [string]$Images,
 
         [Parameter(Mandatory=$False)]
-        [string]$iosProject,
+        [string]$IosProject,
 
         [Parameter(Mandatory=$False)]
-        [string]$iosResources,
+        [string]$IosResources,
 	
         [Parameter(Mandatory=$False)]
-        [string]$androidProject,
+        [string]$AndroidProject,
 
         [Parameter(Mandatory=$False)]
-        [string]$androidResources,
+        [string]$AndroidResources,
 
         [Parameter()]
-        [switch]$move
+        [switch]$Move
     )
 
-    if ([string]::IsNullOrEmpty($iosProject) -And [string]::IsNullOrEmpty($androidProject))
+    if ([string]::IsNullOrEmpty($IosProject) -And [string]::IsNullOrEmpty($AndroidProject))
     {
-        Write-Error "No `$iosProject or `$androidProject"
+        Write-Error "No `$IosProject or `$AndroidProject"
         return
     }
-    elseif ((![string]::IsNullOrEmpty($iosProject)) -And (!(Test-Path $iosProject)))
+    elseif ((![string]::IsNullOrEmpty($IosProject)) -And (!(Test-Path $IosProject)))
     {
-        Write-Error "Did not find $iosProject"
+        Write-Error "Did not find $IosProject"
         return
     }
-    elseif ((![string]::IsNullOrEmpty($androidProject)) -And (!(Test-Path $androidProject)))
+    elseif ((![string]::IsNullOrEmpty($AndroidProject)) -And (!(Test-Path $AndroidProject)))
     {
-        Write-Error "Did not find $androidProject"
+        Write-Error "Did not find $AndroidProject"
         return
     }
 
@@ -84,18 +84,18 @@ function Add-XamarinImages()
 
     Get-ChildItem $imagesPath -Include *.png -Exclude *@2x.png, *@3x.png, *dpi.png |
     Foreach-Object {
-        if (![string]::IsNullOrEmpty($iosProject))
+        if (![string]::IsNullOrEmpty($IosProject))
         {
-            Add-XamarinIosImage $_ $iosProject -iosResources $iosResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+            Add-XamarinIosImage $_ $IosProject -IosResources $IosResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         }
-        if (![string]::IsNullOrEmpty($androidProject))
+        if (![string]::IsNullOrEmpty($AndroidProject))
         {
-            Add-XamarinAndroidImage $_ $androidProject -androidResources $androidResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+            Add-XamarinAndroidImage $_ $AndroidProject -AndroidResources $AndroidResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         }
         $done.Add($_, $_)
     }
 
-    if (![string]::IsNullOrEmpty($androidProject))
+    if (![string]::IsNullOrEmpty($AndroidProject))
     {
         Get-ChildItem $imagesPath -Include *dpi.png |
         Foreach-Object {
@@ -117,7 +117,7 @@ function Add-XamarinImages()
             }
             if (!$done.ContainsKey($filename))
             {
-                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $androidProject -androidResources $androidResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $AndroidProject -AndroidResources $AndroidResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
                 $done.Add($filename, $filename)
             }
         }

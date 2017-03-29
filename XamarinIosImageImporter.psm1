@@ -1,5 +1,5 @@
-﻿[string]$script:iosResourcesDirectoryName = $iosResources
-[string]$script:iosImage1 = $image
+﻿[string]$script:iosResourcesDirectoryName = $IosResources
+[string]$script:iosImage1 = $Image
 [string]$script:iosImage2 = ""
 [string]$script:iosImage3 = ""
 
@@ -7,39 +7,39 @@ function Test-Parameters()
 {
     $parametersOk = $True
 
-    if (!(Test-Path $image))
+    if (!(Test-Path $Image))
     {
         $parametersOk = $False
-        Write-Error "Did not find $image"
+        Write-Error "Did not find $Image"
     }
-    if (!($image.EndsWith(".png")))
+    if (!($Image.EndsWith(".png")))
     {
         $parametersOk = $False
-        Write-Error "$image is not a .png"
-    }
-
-    if (!(Test-Path $iosProject))
-    {
-        $parametersOk = $False
-        Write-Error "Did not find $iosProject"
-    }
-    if (!($iosProject.EndsWith(".csproj")))
-    {
-        $parametersOk = $False
-        Write-Error "$iosProject is not a .csproj"
+        Write-Error "$Image is not a .png"
     }
 
-    if (!([string]::IsNullOrEmpty($iosResources)))
+    if (!(Test-Path $IosProject))
     {
-        if (!(Test-Path $iosResources))
+        $parametersOk = $False
+        Write-Error "Did not find $IosProject"
+    }
+    if (!($IosProject.EndsWith(".csproj")))
+    {
+        $parametersOk = $False
+        Write-Error "$IosProject is not a .csproj"
+    }
+
+    if (!([string]::IsNullOrEmpty($IosResources)))
+    {
+        if (!(Test-Path $IosResources))
         {
             $parametersOk = $False
-            Write-Error "Did not find $iosResources"
+            Write-Error "Did not find $IosResources"
         }
     }
-    elseif (Test-Path $iosProject)
+    elseif (Test-Path $IosProject)
     {
-        $iosProjectDirectory = Get-Item (Get-Item $iosProject).DirectoryName
+        $iosProjectDirectory = Get-Item (Get-Item $IosProject).DirectoryName
         $script:iosResourcesDirectoryName = Join-Path $iosProjectDirectory.ToString() "Resources"
     }
 
@@ -51,21 +51,21 @@ function Copy-ImagesToResources()
     [CmdletBinding()]
     Param(
         [Parameter()]
-        [switch]$move
+        [switch]$Move
     )
 
-    $script:iosImage1 = Copy-Image $image $script:iosResourcesDirectoryName -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage1 = Copy-Image $Image $script:iosResourcesDirectoryName -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
-    $script:iosImage2 = $image.Substring(0, $image.Length - 4) + "@2x.png"
-    $script:iosImage2 = Copy-Image $script:iosImage2 $script:iosResourcesDirectoryName -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage2 = $Image.Substring(0, $Image.Length - 4) + "@2x.png"
+    $script:iosImage2 = Copy-Image $script:iosImage2 $script:iosResourcesDirectoryName -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
-    $script:iosImage3 = $image.Substring(0, $image.Length - 4) + "@3x.png"
-    $script:iosImage3 = Copy-Image $script:iosImage3 $script:iosResourcesDirectoryName -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage3 = $Image.Substring(0, $Image.Length - 4) + "@3x.png"
+    $script:iosImage3 = Copy-Image $script:iosImage3 $script:iosResourcesDirectoryName -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 }
 
 function Add-ImagesToProject()
 {
-    $projectXml = [xml](Get-Content $iosProject)
+    $projectXml = [xml](Get-Content $IosProject)
 
     $nsmgr = Get-XmlNamespace $projectXml
 
@@ -82,17 +82,17 @@ function Add-ImagesToProject()
         $x = $projectXml.Project.AppendChild($itemGroup)
     }
 
-    Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage1 $iosProject
+    Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage1 $IosProject
     if (Test-Path $script:iosImage2)
     {
-        Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage2 $iosProject
+        Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage2 $IosProject
     }
     if (Test-Path $script:iosImage3)
     {
-        Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage3 $iosProject
+        Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage3 $IosProject
     }
 
-    $projectXml.Save($iosProject)
+    $projectXml.Save($IosProject)
 }
 
 <#
@@ -104,19 +104,19 @@ function Add-ImagesToProject()
   project file so it will be available when viewed in Visual/Xamarin Studio. If *@2x.png or *@3x.png variants
   of the image exist, these will be imported as well.
 
- .Parameter image
+ .Parameter Image
   The .png image to process.
 
- .Parameter iosProject
+ .Parameter IosProject
   The .csproj of the Xamarin.iOS project to import the image(s) into.
 
- .Parameter iosResources
+ .Parameter IosResources
   If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
 
- .Parameter move
+ .Parameter Move
   Moves instead of copies the source image(s).
 
- .Parameter verbose
+ .Parameter Verbose
   Shows additional output in the verbose stream of attempts to process an image that did not complete.
 
  .Example
@@ -125,31 +125,29 @@ function Add-ImagesToProject()
 
  .Example
   # Run with all optional parameters.
-  Add-XamarinIosImage -image C:\Images\logo.png -iosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -iosResources C:\Source\MyProject.iOS\Resources -move -Verbose
+  Add-XamarinIosImage -Image C:\Images\logo.png -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -IosResources C:\Source\MyProject.iOS\Resources -Move -Verbose
 #>
 function Add-XamarinIosImage()
 {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True, Position=1)]
-        [string]$image,
+        [string]$Image,
 	
         [Parameter(Mandatory=$True, Position=2)]
-        [string]$iosProject,
+        [string]$IosProject,
 
         [Parameter(Mandatory=$False)]
-        [string]$iosResources,
+        [string]$IosResources,
 
-        [Parameter(Mandatory=$False)]
-        [bool]$move = $False
+        [Parameter()]
+        [switch]$Move
     )
 
     $parametersOk = Test-Parameters
     if ($parametersOk)
     {
-        Copy-ImagesToResources -move:$move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+        Copy-ImagesToResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         Add-ImagesToProject
     }
 }
-
-Export-ModuleMember -Function "Add-XamarinIosImage"
