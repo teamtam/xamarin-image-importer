@@ -5,7 +5,7 @@
  .Description
   Copies .png images into the corresponding Resources directory of Xamarin.iOS and Xamarin.Android projects and
   imports them to the .csproj project files so it will be available when viewed in Visual/Xamarin Studio. If they
-  exist, *@2x.png or *@3x.png variants of the image will be imported for iOS, and *ldpi.png, *mdpi.png, *hdpi.png,
+  exist, *@2x.png or *@3x.png variants of the image will be imported for iOS, while *ldpi.png, *mdpi.png, *hdpi.png,
   *xhdpi.png, *xxhdpi.png and *xxxhdpi.png will be imported for Android.
 
  .Parameter Images
