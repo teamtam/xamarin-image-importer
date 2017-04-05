@@ -1,7 +1,6 @@
-﻿function Get-Filename([string]$filenameWithPath)
+﻿function Get-Filename([string]$FilenameWithPath)
 {
-    $filenameIndex = $filenameWithPath.LastIndexOf("\") + 1
-    $filenameWithPath.Substring($filenameIndex)
+    Split-Path $filenameWithPath -Leaf
 }
 
 function Copy-Image()
@@ -9,39 +8,39 @@ function Copy-Image()
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True, Position=1)]
-        [string]$source,
+        [string]$Source,
 
         [Parameter(Mandatory=$True, Position=2)]
-        [string]$destination,
+        [string]$Destination,
 
         [Parameter()]
-        [switch]$move
+        [switch]$Move
     )
-    if (Test-Path $destination)
+    if (Test-Path $Destination)
     {
-        if (Test-Path $source)
+        if (Test-Path $Source)
         {
-            if ($move)
+            if ($Move)
             {
-                Move-Item $source $destination -Force
-                Write-Information "Moved $($source) to $($destination)" -InformationAction Continue
+                Move-Item $Source $Destination -Force
+                Write-Information "Moved $($Source) to $($Destination)" -InformationAction Continue
             }
             else
             {
-                Copy-Item $source $destination
-                Write-Information "Copied $($source) to $($destination)" -InformationAction Continue
+                Copy-Item $Source $Destination
+                Write-Information "Copied $($Source) to $($Destination)" -InformationAction Continue
             }
-            $newImage = Join-Path $destination (Get-Filename $source)
+            $newImage = Join-Path $Destination (Get-Filename $Source)
             $newImage
         }
         else
         {
-            Write-Verbose "Did not find $source"
+            Write-Verbose "Did not find $Source"
         }
     }
     else
     {
-        Write-Verbose "Did not find $destination"
+        Write-Verbose "Did not find $Destination"
     }
 }
 
@@ -50,44 +49,44 @@ function Copy-ImageAndRename()
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True, Position=1)]
-        [string]$source,
+        [string]$Source,
 
         [Parameter(Mandatory=$True, Position=2)]
-        [string]$destination,
+        [string]$Destination,
 
         [Parameter(Mandatory=$True, Position=3)]
-        [string]$renameTo,
+        [string]$RenameTo,
 
         [Parameter()]
-        [switch]$move
+        [switch]$Move
     )
 
-    if (Test-Path $destination)
+    if (Test-Path $Destination)
     {
-        if (Test-Path $source)
+        if (Test-Path $Source)
         {
-            if ($move)
+            if ($Move)
             {
-                Move-Item $source $destination -Force
-                Move-Item (Join-Path $destination (Get-Filename $source)) (Join-Path $destination (Get-Filename $renameTo)) -Force
-                Write-Information "Moved $($source) to $($destination)" -InformationAction Continue
+                Move-Item $Source $Destination -Force
+                Move-Item (Join-Path $Destination (Get-Filename $Source)) (Join-Path $Destination (Get-Filename $RenameTo)) -Force
+                Write-Information "Moved $($Source) to $($Destination)" -InformationAction Continue
             }
             else
             {
-                Copy-Item $source $destination
-                Move-Item (Join-Path $destination (Get-Filename $source)) (Join-Path $destination (Get-Filename $renameTo)) -Force
-                Write-Information "Copied $($source) to $($destination)" -InformationAction Continue
+                Copy-Item $Source $Destination
+                Move-Item (Join-Path $Destination (Get-Filename $Source)) (Join-Path $Destination (Get-Filename $RenameTo)) -Force
+                Write-Information "Copied $($Source) to $($Destination)" -InformationAction Continue
             }
-            $newImage = Join-Path $destination (Get-Filename $renameTo)
+            $newImage = Join-Path $Destination (Get-Filename $RenameTo)
             $newImage
         }
         else
         {
-            Write-Verbose "Did not find $source"
+            Write-Verbose "Did not find $Source"
         }
     }
     else
     {
-        Write-Verbose "Did not find $destination"
+        Write-Verbose "Did not find $Destination"
     }
 }
