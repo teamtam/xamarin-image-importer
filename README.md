@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/3bh4uoa4gffkajr0?svg=true)](https://ci.appveyor.com/project/teamtam/xamarin-image-importer)
+
 # xamarin-image-importer
 
 Copies .png images into the corresponding Resources directory of Xamarin.iOS and Xamarin.Android projects and
