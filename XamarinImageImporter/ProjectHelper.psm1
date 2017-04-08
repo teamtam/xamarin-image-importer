@@ -1,4 +1,4 @@
-﻿$xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
+﻿$script:xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
 
 function Get-XmlNamespace([xml]$projectXml)
 {
@@ -17,7 +17,7 @@ function Get-ItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr,
     else
     {
         $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns)
-        $x = $projectXml.Project.AppendChild($itemGroup)
+        $projectXml.Project.AppendChild($itemGroup) 1>$null
     }
     ,$itemGroup
 }
@@ -43,7 +43,7 @@ function Add-BundleResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$n
     {
         $bundleResource = $projectXml.CreateElement("BundleResource", $xmlns);
         $bundleResource.SetAttribute("Include", $localFilename);
-        $x = $itemGroup.AppendChild($bundleResource)
+        $itemGroup.AppendChild($bundleResource) 1>$null
         Write-Information "Added $($localFilename) to $($projectName)" -InformationAction Continue
     }
 }
@@ -57,7 +57,7 @@ function Add-AndroidResource([xml]$projectXml, [System.Xml.XmlNamespaceManager]$
     {
         $androidResource = $projectXml.CreateElement("AndroidResource", $xmlns);
         $androidResource.SetAttribute("Include", $localFilename);
-        $x = $itemGroup.AppendChild($androidResource)
+        $itemGroup.AppendChild($androidResource) 1>$null
         Write-Information "Added $($localFilename) to $($projectName)" -InformationAction Continue
     }
 }

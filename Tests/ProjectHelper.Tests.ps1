@@ -15,6 +15,28 @@ Describe "ProjectHelper" {
         }
     }
 
+    Context "Get-ItemGroup" {
+        BeforeEach {
+            Copy-Item .\Sandbox\Solution\Sandbox\Sandbox.iOS $TestDrive -Recurse
+            $csproj = Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath Sandbox.iOS.csproj
+            $projectXml = [xml](Get-Content $csproj)
+            $nsmgr = Get-XmlNamespace $projectXml
+        }
+        AfterEach {
+            Remove-Item (Join-Path $TestDrive Sandbox.iOS) -Recurse
+        }
+        It "Should create and return an ItemGroup System.Xml.XmlElement if one cannot be found" {
+            $itemGroupNodes = $projectXml.SelectNodes("//a:ItemGroup", $nsmgr)
+            $itemGroupNodes.Count | Should BeGreaterThan 1
+            $itemGroupNodes | ForEach-Object {
+                $_.ParentNode.RemoveChild($_) 1>$null
+            }
+            $projectXml.SelectNodes("//a:ItemGroup", $nsmgr).Count | Should Be 0
+            Get-BundleResourceItemGroup $projectXml $nsmgr | Should BeOfType System.Xml.XmlElement
+            $projectXml.SelectNodes("//a:ItemGroup", $nsmgr).Count | Should Be 1
+        }
+    }
+
     Context "Get-BundleResourceItemGroup" {
         BeforeEach {
             Copy-Item .\Sandbox\Solution\Sandbox\Sandbox.iOS $TestDrive -Recurse
