@@ -10,7 +10,6 @@ function Get-XmlNamespace([xml]$projectXml)
 function Get-ItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr, [string]$xPath)
 {
     $firstItemGroupNode = $projectXml.SelectNodes($xPath, $nsmgr)[1]
-    [System.Xml.XmlDocument]$itemGroup
     if ($firstItemGroupNode)
     {
         $itemGroup = $firstItemGroupNode.ParentNode
@@ -20,21 +19,18 @@ function Get-ItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr,
         $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns)
         $x = $projectXml.Project.AppendChild($itemGroup)
     }
-    Write-Debug $itemGroup.GetType()
     ,$itemGroup
 }
 
 function Get-BundleResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr)
 {
     $itemGroup = Get-ItemGroup $projectXml $nsmgr "//a:BundleResource"
-    Write-Debug $itemGroup.GetType() # System.Object[] not System.Xml.XmlElement ???
     ,$itemGroup
 }
 
 function Get-AndroidResourceItemGroup([xml]$projectXml, [System.Xml.XmlNamespaceManager]$nsmgr)
 {
     $itemGroup = Get-ItemGroup $projectXml $nsmgr "//a:AndroidResource"
-    Write-Debug $itemGroup.GetType() # System.Object[] not System.Xml.XmlElement ???
     ,$itemGroup
 }
 
