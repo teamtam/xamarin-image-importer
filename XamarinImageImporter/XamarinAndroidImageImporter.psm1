@@ -81,7 +81,7 @@ function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $AndroidProject)
 
-    $nsmgr = Get-XmlNamespace $projectXml
+    $nsmgr = Get-XmlNamespaceManager $projectXml
 
     #$itemGroup = Get-AndroidResourceItemGroup $projectXml $nsmgr
     #Write-Debug $itemGroup.GetType()

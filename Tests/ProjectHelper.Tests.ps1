@@ -1,7 +1,7 @@
 Describe "ProjectHelper" {
-    Import-Module $PSScriptRoot\..\XamarinImageImporter\ProjectHelper.psd1
+    Import-Module $PSScriptRoot\..\XamarinImageImporter\ProjectHelper.psm1
 
-    Context "Get-XmlNamespace" {
+    Context "Get-XmlNamespaceManager" {
         BeforeEach {
             Copy-Item .\Sandbox\Solution\Sandbox\Sandbox.iOS $TestDrive -Recurse
             $csproj = Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath Sandbox.iOS.csproj
@@ -11,7 +11,7 @@ Describe "ProjectHelper" {
             Remove-Item (Join-Path $TestDrive Sandbox.iOS) -Recurse
         }
         It "Should return a System.Xml.XmlNamespaceManager" {
-            Get-XmlNamespace $projectXml | Should BeOfType System.Xml.XmlNamespaceManager
+            Get-XmlNamespaceManager $projectXml | Should BeOfType System.Xml.XmlNamespaceManager
         }
     }
 
@@ -20,7 +20,7 @@ Describe "ProjectHelper" {
             Copy-Item .\Sandbox\Solution\Sandbox\Sandbox.iOS $TestDrive -Recurse
             $csproj = Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath Sandbox.iOS.csproj
             $projectXml = [xml](Get-Content $csproj)
-            $nsmgr = Get-XmlNamespace $projectXml
+            $nsmgr = Get-XmlNamespaceManager $projectXml
         }
         AfterEach {
             Remove-Item (Join-Path $TestDrive Sandbox.iOS) -Recurse
@@ -32,7 +32,7 @@ Describe "ProjectHelper" {
                 $_.ParentNode.RemoveChild($_) 1>$null
             }
             $projectXml.SelectNodes("//a:ItemGroup", $nsmgr).Count | Should Be 0
-            Get-BundleResourceItemGroup $projectXml $nsmgr | Should BeOfType System.Xml.XmlElement
+            Get-ItemGroup $projectXml $nsmgr "//a:BundleResource" | Should BeOfType System.Xml.XmlElement
             $projectXml.SelectNodes("//a:ItemGroup", $nsmgr).Count | Should Be 1
         }
     }
@@ -42,7 +42,7 @@ Describe "ProjectHelper" {
             Copy-Item .\Sandbox\Solution\Sandbox\Sandbox.iOS $TestDrive -Recurse
             $csproj = Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath Sandbox.iOS.csproj
             $projectXml = [xml](Get-Content $csproj)
-            $nsmgr = Get-XmlNamespace $projectXml
+            $nsmgr = Get-XmlNamespaceManager $projectXml
         }
         AfterEach {
             Remove-Item (Join-Path $TestDrive Sandbox.iOS) -Recurse
@@ -57,7 +57,7 @@ Describe "ProjectHelper" {
             Copy-Item .\Sandbox\Solution\Sandbox\Sandbox.Android $TestDrive -Recurse
             $csproj = Join-Path $TestDrive Sandbox.Android | Join-Path -ChildPath Sandbox.Android.csproj
             $projectXml = [xml](Get-Content $csproj)
-            $nsmgr = Get-XmlNamespace $projectXml
+            $nsmgr = Get-XmlNamespaceManager $projectXml
         }
         AfterEach {
             Remove-Item (Join-Path $TestDrive Sandbox.Android) -Recurse
@@ -73,7 +73,7 @@ Describe "ProjectHelper" {
             $csproj = Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath Sandbox.iOS.csproj
             $image = Copy-Image ".\Sandbox\Images\filter_all_blue.png" (Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath Resources) 6>$null
             $projectXml = [xml](Get-Content $csproj)
-            $nsmgr = Get-XmlNamespace $projectXml
+            $nsmgr = Get-XmlNamespaceManager $projectXml
             $itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
         }
         AfterEach {
@@ -103,7 +103,7 @@ Describe "ProjectHelper" {
             $csproj = Join-Path $TestDrive Sandbox.Android | Join-Path -ChildPath Sandbox.Android.csproj
             $image = Copy-ImageAndRename ".\Sandbox\Images\filter_all_bluehdpi.png" (Join-Path $TestDrive Sandbox.Android | Join-Path -ChildPath Resources | Join-Path -ChildPath drawable-hdpi) filter_all_blue.png  6>$null
             $projectXml = [xml](Get-Content $csproj)
-            $nsmgr = Get-XmlNamespace $projectXml
+            $nsmgr = Get-XmlNamespaceManager $projectXml
             $itemGroup = Get-AndroidResourceItemGroup $projectXml $nsmgr
         }
         AfterEach {

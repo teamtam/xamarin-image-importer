@@ -1,6 +1,6 @@
-﻿$script:xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
+﻿$xmlns = "http://schemas.microsoft.com/developer/msbuild/2003"
 
-function Get-XmlNamespace([xml]$projectXml)
+function Get-XmlNamespaceManager([xml]$projectXml)
 {
     [System.Xml.XmlNamespaceManager]$nsmgr = $projectXml.NameTable
     $nsmgr.AddNamespace("a", $xmlns)

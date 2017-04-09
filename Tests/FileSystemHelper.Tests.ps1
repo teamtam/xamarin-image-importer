@@ -1,5 +1,5 @@
 Describe "FileSystemHelper" {
-    Import-Module $PSScriptRoot\..\XamarinImageImporter\FileSystemHelper.psd1
+    Import-Module $PSScriptRoot\..\XamarinImageImporter\FileSystemHelper.psm1
 
     Context "Get-Filename" {
         It "Should return the filename when there is a full path" {
@@ -39,7 +39,7 @@ Describe "FileSystemHelper" {
             Test-Path (Join-Path $TestDrive Something | Join-Path -ChildPath filter_all_blue.png) | Should Be $true
         }
         It "Should write to the information stream when a move operation occurs" {
-            (((Copy-Image $Source (Join-Path $TestDrive Something) -Move) 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
+            ((Copy-Image $Source (Join-Path $TestDrive Something) -Move 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
         }
         It "Should return the new filename with the path when a move operation occurs" {
             (Copy-Image $Source (Join-Path $TestDrive Something) -Move) 6>$null | Should BeLike "*filter_all_blue.png"
@@ -56,7 +56,7 @@ Describe "FileSystemHelper" {
             Test-Path (Join-Path $TestDrive filter_all_blue.png) | Should Be $true
         }
         It "Should write to the information stream when a copy operation occurs" {
-            (((Copy-Image .\Sandbox\Images\filter_all_blue.png $TestDrive) 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
+            ((Copy-Image .\Sandbox\Images\filter_all_blue.png $TestDrive 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
         }
         It "Should return the new filename with the path when a copy operation occurs" {
             (Copy-Image .\Sandbox\Images\filter_all_blue.png $TestDrive) 6>$null| Should BeLike "*filter_all_blue.png"
@@ -96,7 +96,7 @@ Describe "FileSystemHelper" {
             Test-Path (Join-Path $TestDrive Something | Join-Path -ChildPath image.png) | Should Be $true
         }
         It "Should write to the information stream when a move operation occurs" {
-            (((Copy-ImageAndRename $Source (Join-Path $TestDrive Something) image.png -Move) 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
+            ((Copy-ImageAndRename $Source (Join-Path $TestDrive Something) image.png -Move 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
         }
         It "Should return the new filename with the path when a move operation occurs" {
             (Copy-ImageAndRename $Source (Join-Path $TestDrive Something) image.png -Move) 6>$null | Should BeLike "*image.png"
@@ -114,7 +114,7 @@ Describe "FileSystemHelper" {
             Test-Path (Join-Path $TestDrive image.png) | Should Be $true
         }
         It "Should write to the information stream when a copy operation occurs" {
-            (((Copy-ImageAndRename .\Sandbox\Images\filter_all_blue.png $TestDrive image.png) 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
+            ((Copy-ImageAndRename .\Sandbox\Images\filter_all_blue.png $TestDrive image.png 1>$null) 6>&1 | Measure-Object -Line).Lines | Should Be 1
         }
         It "Should return the new filename with the path when a copy operation occurs" {
             (Copy-ImageAndRename .\Sandbox\Images\filter_all_blue.png $TestDrive image.png) 6>$null | Should BeLike "*image.png"
