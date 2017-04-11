@@ -16,7 +16,7 @@ exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, wh
 `Add-XamarinImages C:\Images -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj`
 
 ### Run for both iOS and Android with all optional parameters
-`Add-XamarinImages -Images C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -IosResources C:\Source\MyProject.iOS\Resources -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -AndroidResources C:\Source\MyProject.Droid\Resources -Move -Verbose`
+`Add-XamarinImages -Images C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -Move -Verbose`
 
 ### More detailed documentation can be found through PowerShell 'Get-Help' after installation
 * `Get-Help Add-XamarinImages`
