@@ -14,14 +14,8 @@
  .Parameter IosProject
   The .csproj of the Xamarin.iOS project to import the image(s) into.
 
- .Parameter IosResources
-  If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
-
  .Parameter AndroidProject
   The .csproj of the Xamarin.Android project to import the image(s) into.
-
- .Parameter AndroidResources
-  If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
 
  .Parameter Move
   Moves instead of copies the source image(s).
@@ -38,7 +32,7 @@
 
  .Example
   # Run for both iOS and Android with all optional parameters.
-  Add-XamarinImages -Images C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -IosResources C:\Source\MyProject.iOS\Resources -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -AndroidResources C:\Source\MyProject.Droid\Resources -Move -Verbose
+  Add-XamarinImages -Images C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -Move -Verbose
 #>
 function Add-XamarinImages()
 {
@@ -51,13 +45,7 @@ function Add-XamarinImages()
         [string]$IosProject,
 
         [Parameter(Mandatory=$False)]
-        [string]$IosResources,
-	
-        [Parameter(Mandatory=$False)]
         [string]$AndroidProject,
-
-        [Parameter(Mandatory=$False)]
-        [string]$AndroidResources,
 
         [Parameter()]
         [switch]$Move
@@ -86,11 +74,11 @@ function Add-XamarinImages()
     Foreach-Object {
         if (![string]::IsNullOrEmpty($IosProject))
         {
-            Add-XamarinIosImage $_ $IosProject -IosResources $IosResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+            Add-XamarinIosImage $_ $IosProject -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         }
         if (![string]::IsNullOrEmpty($AndroidProject))
         {
-            Add-XamarinAndroidImage $_ $AndroidProject -AndroidResources $AndroidResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+            Add-XamarinAndroidImage $_ $AndroidProject -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         }
         $done.Add($_.BaseName + $_.Extension, $_.BaseName + $_.Extension)
     }
@@ -117,7 +105,7 @@ function Add-XamarinImages()
             }
             if (!$done.ContainsKey($filename))
             {
-                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $AndroidProject -AndroidResources $AndroidResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $AndroidProject -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
                 $done.Add($filename, $filename)
             }
         }

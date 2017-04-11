@@ -1,7 +1,7 @@
-﻿[string]$script:iosResourcesDirectoryName = $IosResources
-[string]$script:iosImage1 = $Image
-[string]$script:iosImage2 = ""
-[string]$script:iosImage3 = ""
+﻿$iosResourcesDirectory = ""
+$iosImage1 = $Image
+$iosImage2 = ""
+$iosImage3 = ""
 
 function Test-Parameters()
 {
@@ -29,21 +29,13 @@ function Test-Parameters()
         Write-Error "$IosProject is not a .csproj"
     }
 
-    if (!([string]::IsNullOrEmpty($IosResources)))
-    {
-        if (!(Test-Path $IosResources))
-        {
-            $parametersOk = $False
-            Write-Error "Did not find $IosResources"
-        }
-    }
-    elseif (Test-Path $IosProject)
+    if (Test-Path $IosProject)
     {
         $iosProjectDirectory = Get-Item (Get-Item $IosProject).DirectoryName
-        $script:iosResourcesDirectoryName = Join-Path $iosProjectDirectory.ToString() "Resources"
+        $script:iosResourcesDirectory = Join-Path $iosProjectDirectory.ToString() "Resources"
     }
 
-    return $parametersOk
+    $parametersOk
 }
 
 function Copy-ImagesToResources()
@@ -54,42 +46,29 @@ function Copy-ImagesToResources()
         [switch]$Move
     )
 
-    $script:iosImage1 = Copy-Image $Image $script:iosResourcesDirectoryName -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage1 = Copy-Image $Image $iosResourcesDirectory -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:iosImage2 = $Image.Substring(0, $Image.Length - 4) + "@2x.png"
-    $script:iosImage2 = Copy-Image $script:iosImage2 $script:iosResourcesDirectoryName -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage2 = Copy-Image $iosImage2 $iosResourcesDirectory -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 
     $script:iosImage3 = $Image.Substring(0, $Image.Length - 4) + "@3x.png"
-    $script:iosImage3 = Copy-Image $script:iosImage3 $script:iosResourcesDirectoryName -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage3 = Copy-Image $iosImage3 $iosResourcesDirectory -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
 }
 
 function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $IosProject)
-
     $nsmgr = Get-XmlNamespaceManager $projectXml
+    $itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
 
-    #$itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
-    #Write-Debug $itemGroup.GetType()
-    $firstItemGroupNode = $projectXml.SelectNodes("//a:BundleResource", $nsmgr)[1]
-    if ($firstItemGroupNode)
+    Add-BundleResource $projectXml $nsmgr $itemGroup $iosImage1 $IosProject
+    if ((![string]::IsNullOrEmpty($iosImage2)) -and (Test-Path $iosImage2))
     {
-        $itemGroup = $firstItemGroupNode.ParentNode
+        Add-BundleResource $projectXml $nsmgr $itemGroup $iosImage2 $IosProject
     }
-    else
+    if ((![string]::IsNullOrEmpty($iosImage3)) -and (Test-Path $iosImage3))
     {
-        $itemGroup = $projectXml.CreateElement("ItemGroup", $xmlns)
-        $x = $projectXml.Project.AppendChild($itemGroup)
-    }
-
-    Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage1 $IosProject
-    if ((![string]::IsNullOrEmpty($script:iosImage2)) -and (Test-Path $script:iosImage2))
-    {
-        Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage2 $IosProject
-    }
-    if ((![string]::IsNullOrEmpty($script:iosImage3)) -and (Test-Path $script:iosImage3))
-    {
-        Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage3 $IosProject
+        Add-BundleResource $projectXml $nsmgr $itemGroup $iosImage3 $IosProject
     }
 
     $projectXml.Save($IosProject)
@@ -110,9 +89,6 @@ function Add-ImagesToProject()
  .Parameter IosProject
   The .csproj of the Xamarin.iOS project to import the image(s) into.
 
- .Parameter IosResources
-  If the Resources folder is not in a default location relative to the .csproj file, this can be specified.
-
  .Parameter Move
   Moves instead of copies the source image(s).
 
@@ -125,7 +101,7 @@ function Add-ImagesToProject()
 
  .Example
   # Run with all optional parameters.
-  Add-XamarinIosImage -Image C:\Images\logo.png -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -IosResources C:\Source\MyProject.iOS\Resources -Move -Verbose
+  Add-XamarinIosImage -Image C:\Images\logo.png -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -Move -Verbose
 #>
 function Add-XamarinIosImage()
 {
@@ -136,9 +112,6 @@ function Add-XamarinIosImage()
 	
         [Parameter(Mandatory=$True, Position=2)]
         [string]$IosProject,
-
-        [Parameter(Mandatory=$False)]
-        [string]$IosResources,
 
         [Parameter()]
         [switch]$Move
