@@ -67,7 +67,7 @@ function Add-ImagesToProject()
 {
     $projectXml = [xml](Get-Content $IosProject)
 
-    $nsmgr = Get-XmlNamespace $projectXml
+    $nsmgr = Get-XmlNamespaceManager $projectXml
 
     #$itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
     #Write-Debug $itemGroup.GetType()
@@ -83,11 +83,11 @@ function Add-ImagesToProject()
     }
 
     Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage1 $IosProject
-    if (Test-Path $script:iosImage2)
+    if ((![string]::IsNullOrEmpty($script:iosImage2)) -and (Test-Path $script:iosImage2))
     {
         Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage2 $IosProject
     }
-    if (Test-Path $script:iosImage3)
+    if ((![string]::IsNullOrEmpty($script:iosImage3)) -and (Test-Path $script:iosImage3))
     {
         Add-BundleResource $projectXml $nsmgr $itemGroup $script:iosImage3 $IosProject
     }
