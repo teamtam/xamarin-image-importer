@@ -16,7 +16,7 @@ Describe "XamarinAndroidImageImporter" {
         It "Should not allow *.gif" {
             (Add-XamarinAndroidImage image.gif $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
         }
-        It "Should not allow *.csproj that cannot be found" {
+        It "Should not allow *.csproj that is not found" {
             (Add-XamarinAndroidImage $image Sandbox.Android.csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
         }
         It "Should not allow projects that are not *.csproj" {
@@ -37,11 +37,11 @@ Describe "XamarinAndroidImageImporter" {
             (Add-XamarinAndroidImage image.png $csproj 6>&1 4>$null | Measure-Object -Line).Lines | Should Be 0
             (Add-XamarinAndroidImage image.png $csproj 6>$null 4>&1 | Measure-Object -Line).Lines | Should Be 0
         }
-        It "Should write to the verbose stream when the image cannot be found and the verbose switch is on" {
+        It "Should write to the verbose stream when the image is not found and the verbose switch is on" {
             (Add-XamarinAndroidImage image.png $csproj -Verbose 6>&1 4>$null | Measure-Object -Line).Lines | Should Be 0
             ((Add-XamarinAndroidImage image.png $csproj -Verbose 6>$null) 4>&1 | Measure-Object -Line).Lines | Should Be 6
         }
-        It "Should write to the verbose stream when the directory cannot be found and the verbose switch is on" {
+        It "Should write to the verbose stream when the directory is not found and the verbose switch is on" {
             $androidFolder = Split-Path $csproj -Parent
             Remove-Item (Join-Path $androidFolder Resources | Join-Path -ChildPath drawable-hdpi) -Recurse
             Remove-Item (Join-Path $androidFolder Resources | Join-Path -ChildPath drawable-xhdpi) -Recurse

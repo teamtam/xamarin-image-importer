@@ -8,16 +8,16 @@ Describe "FileSystemHelper" {
     }
 
     Context "Copy-Image with -Verbose" {
-        It "Should write to the verbose stream when the source cannot be found and the verbose switch is on" {
+        It "Should write to the verbose stream when the source is not found and the verbose switch is on" {
             (Copy-Image C:\Qwertyuiop\Asdfghjkl.png $TestDrive -Verbose 4>&1 | Measure-Object -Line).Lines | Should Be 1
         }
-        It "Should not write to the verbose stream when the source cannot be found and the verbose switch is off" {
+        It "Should not write to the verbose stream when the source is not found and the verbose switch is off" {
             (Copy-Image C:\Qwertyuiop\Asdfghjkl.png $TestDrive 4>&1 | Measure-Object -Line).Lines | Should Be 0
         }
-        It "Should write to the verbose stream when the destination cannot be found and the verbose switch is on" {
+        It "Should write to the verbose stream when the destination is not found and the verbose switch is on" {
             (Copy-Image .\Sandbox\Images\filter_all_blue.png C:\Qwertyuiop -Verbose 4>&1 | Measure-Object -Line).Lines | Should Be 1
         }
-        It "Should not write to the verbose stream when the destination cannot be found and the verbose switch is off" {
+        It "Should not write to the verbose stream when the destination is not found and the verbose switch is off" {
             (Copy-Image .\Sandbox\Images\filter_all_blue.png C:\Qwertyuiop 4>&1 | Measure-Object -Line).Lines | Should Be 0
         }
     }
@@ -64,16 +64,16 @@ Describe "FileSystemHelper" {
     }
 
     Context "Copy-ImageAndRename with -Verbose" {
-        It "Should write to the verbose stream when the source cannot be found and the verbose switch is on" {
+        It "Should write to the verbose stream when the source is not found and the verbose switch is on" {
             (Copy-ImageAndRename C:\Qwertyuiop\Asdfghjkl.png $TestDrive image.png -Verbose 4>&1 | Measure-Object -Line).Lines | Should Be 1
         }
-        It "Should not write to the verbose stream when the source cannot be found and the verbose switch is off" {
+        It "Should not write to the verbose stream when the source is not found and the verbose switch is off" {
             (Copy-ImageAndRename C:\Qwertyuiop\Asdfghjkl.png $TestDrive image.png 4>&1 | Measure-Object -Line).Lines | Should Be 0
         }
-        It "Should write to the verbose stream when the destination cannot be found and the verbose switch is on" {
+        It "Should write to the verbose stream when the destination is not found and the verbose switch is on" {
             (Copy-ImageAndRename .\Sandbox\Images\filter_all_blue.png C:\Qwertyuiop image.png -Verbose 4>&1 | Measure-Object -Line).Lines | Should Be 1
         }
-        It "Should not write to the verbose stream when the destination cannot be found and the verbose switch is off" {
+        It "Should not write to the verbose stream when the destination is not found and the verbose switch is off" {
             (Copy-ImageAndRename .\Sandbox\Images\filter_all_blue.png C:\Qwertyuiop image.png 4>&1 | Measure-Object -Line).Lines | Should Be 0
         }
     }

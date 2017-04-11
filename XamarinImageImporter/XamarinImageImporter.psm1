@@ -92,7 +92,7 @@ function Add-XamarinImages()
         {
             Add-XamarinAndroidImage $_ $AndroidProject -AndroidResources $AndroidResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
         }
-        $done.Add($_, $_)
+        $done.Add($_.BaseName + $_.Extension, $_.BaseName + $_.Extension)
     }
 
     if (![string]::IsNullOrEmpty($AndroidProject))
@@ -101,19 +101,19 @@ function Add-XamarinImages()
         Foreach-Object {
             if ($_.BaseName.EndsWith("xxxhdpi"))
             {
-                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 7) + ".png"
+                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 7) + $_.Extension
             }
             elseif ($_.BaseName.EndsWith("xxhdpi"))
             {
-                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 6) + ".png"
+                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 6) + $_.Extension
             }
             elseif ($_.BaseName.EndsWith("xhdpi"))
             {
-                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 5) + ".png"
+                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 5) + $_.Extension
             }
             else
             {
-                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 4) + ".png"
+                $filename = $_.BaseName.Substring(0, $_.BaseName.Length - 4) + $_.Extension
             }
             if (!$done.ContainsKey($filename))
             {

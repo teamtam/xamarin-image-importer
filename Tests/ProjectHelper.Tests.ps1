@@ -25,7 +25,7 @@ Describe "ProjectHelper" {
         AfterEach {
             Remove-Item (Join-Path $TestDrive Sandbox.iOS) -Recurse
         }
-        It "Should create and return an ItemGroup System.Xml.XmlElement if one cannot be found" {
+        It "Should create and return an ItemGroup System.Xml.XmlElement if one is not found" {
             $itemGroupNodes = $projectXml.SelectNodes("//a:ItemGroup", $nsmgr)
             $itemGroupNodes.Count | Should BeGreaterThan 1
             $itemGroupNodes | ForEach-Object {

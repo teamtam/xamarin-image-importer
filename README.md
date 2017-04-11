@@ -37,6 +37,6 @@ exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, wh
 ### Manual Installation
 * `git clone https://github.com/teamtam/xamarin-image-importer.git`
 * Option A: run as is for the current PowerShell session:  
-  `Import-Module .\XamarinImageImporter`
+  `Import-Module .\XamarinImageImporter\XamarinImageImporter.psd1`
 * Option B: install for the current and future PowerShell sessions:  
   Copy all `*.psm1` and `*.psd1` to a directory called `XamarinImageImporter` under a path defined in `$Env:PSModulePath` - [[more info]](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx)

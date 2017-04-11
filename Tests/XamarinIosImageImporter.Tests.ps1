@@ -17,10 +17,10 @@ Describe "XamarinIosImageImporter" {
         It "Should not allow *.gif" {
             (Add-XamarinIosImage image.gif $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 2
         }
-        It "Should not allow *.png that cannot be found" {
+        It "Should not allow *.png that is not found" {
             (Add-XamarinIosImage image.png $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
         }
-        It "Should not allow *.csproj that cannot be found" {
+        It "Should not allow *.csproj that is not found" {
             (Add-XamarinIosImage $image Sandbox.iOS.csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
         }
         It "Should not allow projects that are not *.csproj" {
@@ -42,7 +42,7 @@ Describe "XamarinIosImageImporter" {
             (Add-XamarinIosImage (Join-Path $TestDrive filter_all_white.png) $csproj 6>&1 4>$null | Measure-Object -Line).Lines | Should Be 2
             (Add-XamarinIosImage (Join-Path $TestDrive filter_all_white.png) $csproj 6>$null 4>&1 | Measure-Object -Line).Lines | Should Be 0
         }
-        It "Should write to the verbose stream when the @2x or @3x image cannot be found and the verbose switch is on" {
+        It "Should write to the verbose stream when the @2x or @3x image is not found and the verbose switch is on" {
             (Add-XamarinIosImage (Join-Path $TestDrive filter_all_white.png) $csproj -Verbose 6>&1 4>$null | Measure-Object -Line).Lines | Should Be 2
             ((Add-XamarinIosImage (Join-Path $TestDrive filter_all_white.png) $csproj -Verbose 6>$null) 4>&1 | Measure-Object -Line).Lines | Should Be 2
         }
