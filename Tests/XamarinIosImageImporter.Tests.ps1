@@ -1,5 +1,5 @@
 Describe "XamarinIosImageImporter" {
-    Import-Module $PSScriptRoot\..\XamarinImageImporter\XamarinIosImageImporter.psm1
+    Import-Module $PSScriptRoot\..\XamarinImageImporter\XamarinIosImageImporter.psd1
 
     Context "Test-Parameters" {
         BeforeEach {

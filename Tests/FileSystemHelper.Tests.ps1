@@ -1,5 +1,5 @@
 Describe "FileSystemHelper" {
-    Import-Module $PSScriptRoot\..\XamarinImageImporter\FileSystemHelper.psm1
+    Import-Module $PSScriptRoot\..\XamarinImageImporter\FileSystemHelper.psd1
 
     Context "Get-Filename" {
         It "Should return the filename when there is a full path" {

@@ -1,5 +1,5 @@
 Describe "ProjectHelper" {
-    Import-Module $PSScriptRoot\..\XamarinImageImporter\ProjectHelper.psm1
+    Import-Module $PSScriptRoot\..\XamarinImageImporter\ProjectHelper.psd1
 
     Context "Get-XmlNamespaceManager" {
         BeforeEach {
@@ -32,7 +32,7 @@ Describe "ProjectHelper" {
                 $_.ParentNode.RemoveChild($_) 1>$null
             }
             $projectXml.SelectNodes("//a:ItemGroup", $nsmgr).Count | Should Be 0
-            Get-ItemGroup $projectXml $nsmgr "//a:BundleResource" | Should BeOfType System.Xml.XmlElement
+            Get-BundleResourceItemGroup $projectXml $nsmgr | Should BeOfType System.Xml.XmlElement
             $projectXml.SelectNodes("//a:ItemGroup", $nsmgr).Count | Should Be 1
         }
     }

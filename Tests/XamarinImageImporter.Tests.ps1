@@ -1,5 +1,5 @@
 Describe "XamarinImagesImporter" {
-    Import-Module $PSScriptRoot\..\XamarinImageImporter\XamarinImageImporter.psm1
+    Import-Module $PSScriptRoot\..\XamarinImageImporter\XamarinImageImporter.psd1
 
     Context "Test-Parameters" {
         It "Should not allow both iOS and Android *.csproj to be omitted" {
