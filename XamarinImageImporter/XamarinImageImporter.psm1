@@ -39,12 +39,27 @@ function Add-XamarinImages()
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True, Position=1)]
+        [ValidateScript({Test-Path $_ -PathType Container})]
         [string]$Images,
 
         [Parameter(Mandatory=$False)]
+        [ValidateScript({
+            if ((![string]::IsNullOrEmpty($_)) -And (!(Test-Path $_ -PathType Leaf))) {
+                Throw "Did not find $_"
+            } else {
+                $True
+            }
+        })]
         [string]$IosProject,
 
         [Parameter(Mandatory=$False)]
+        [ValidateScript({
+            if ((![string]::IsNullOrEmpty($_)) -And (!(Test-Path $_ -PathType Leaf))) {
+                Throw "Did not find $_"
+            } else {
+                $True
+            }
+        })]
         [string]$AndroidProject,
 
         [Parameter()]
@@ -54,16 +69,6 @@ function Add-XamarinImages()
     if ([string]::IsNullOrEmpty($IosProject) -And [string]::IsNullOrEmpty($AndroidProject))
     {
         Write-Error "No `$IosProject or `$AndroidProject"
-        return
-    }
-    elseif ((![string]::IsNullOrEmpty($IosProject)) -And (!(Test-Path $IosProject)))
-    {
-        Write-Error "Did not find $IosProject"
-        return
-    }
-    elseif ((![string]::IsNullOrEmpty($AndroidProject)) -And (!(Test-Path $AndroidProject)))
-    {
-        Write-Error "Did not find $AndroidProject"
         return
     }
 

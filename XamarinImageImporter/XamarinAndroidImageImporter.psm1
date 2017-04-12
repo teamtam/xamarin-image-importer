@@ -16,18 +16,12 @@ function Test-Parameters()
         Write-Error "$Image is not a .png"
     }
 
-    if (!(Test-Path $AndroidProject))
-    {
-        $parametersOk = $False
-        Write-Error "Did not find $AndroidProject"
-    }
     if (!($AndroidProject.EndsWith(".csproj")))
     {
         $parametersOk = $False
         Write-Error "$AndroidProject is not a .csproj"
     }
-
-    if (Test-Path $AndroidProject)
+    else
     {
         $androidProjectDirectory = Get-Item (Get-Item $AndroidProject).DirectoryName
         $script:androidResourcesDirectory = Join-Path $androidProjectDirectory.ToString() "Resources"
@@ -138,9 +132,11 @@ function Add-XamarinAndroidImage()
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True, Position=1)]
+        [ValidateScript({Test-Path $_ -PathType Leaf -IsValid})]
         [string]$Image,
 	
         [Parameter(Mandatory=$True, Position=2)]
+        [ValidateScript({Test-Path $_ -PathType Leaf})]
         [string]$AndroidProject,
 
         [Parameter()]

@@ -2,14 +2,17 @@ Describe "XamarinImagesImporter" {
     Import-Module $PSScriptRoot\..\XamarinImageImporter\XamarinImageImporter.psd1
 
     Context "Test-Parameters" {
-        It "Should not allow both iOS and Android *.csproj to be omitted" {
-            (Add-XamarinImages $TestDrive 2>&1 | Measure-Object -Line).Lines | Should Be 1
+        It "Should not allow an image path that is not found" {
+            { Add-XamarinImages (Join-Path $TestDrive "Qwerty") } | Should Throw
         }
         It "Should not allow an iOS *.csproj that is not found" {
-            (Add-XamarinImages $TestDrive -IosProject (Join-Path $TestDrive "Sandbox.iOS.csproj") 2>&1 | Measure-Object -Line).Lines | Should Be 1
+            { Add-XamarinImages $TestDrive -IosProject (Join-Path $TestDrive "Sandbox.iOS.csproj") } | Should Throw
         }
         It "Should not allow an Android *.csproj that is not found" {
-            (Add-XamarinImages $TestDrive -AndroidProject (Join-Path $TestDrive "Sandbox.Android.csproj") 2>&1 | Measure-Object -Line).Lines | Should Be 1
+            { Add-XamarinImages $TestDrive -AndroidProject (Join-Path $TestDrive "Sandbox.Android.csproj") } | Should Throw
+        }
+        It "Should not allow both iOS and Android *.csproj to be omitted" {
+            (Add-XamarinImages $TestDrive 2>&1 | Measure-Object -Line).Lines | Should Be 1
         }
     }
 

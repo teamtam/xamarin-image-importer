@@ -7,29 +7,18 @@ function Test-Parameters()
 {
     $parametersOk = $True
 
-    if (!(Test-Path $Image))
-    {
-        $parametersOk = $False
-        Write-Error "Did not find $Image"
-    }
     if (!($Image.EndsWith(".png")))
     {
         $parametersOk = $False
         Write-Error "$Image is not a .png"
     }
 
-    if (!(Test-Path $IosProject))
-    {
-        $parametersOk = $False
-        Write-Error "Did not find $IosProject"
-    }
     if (!($IosProject.EndsWith(".csproj")))
     {
         $parametersOk = $False
         Write-Error "$IosProject is not a .csproj"
     }
-
-    if (Test-Path $IosProject)
+    else
     {
         $iosProjectDirectory = Get-Item (Get-Item $IosProject).DirectoryName
         $script:iosResourcesDirectory = Join-Path $iosProjectDirectory.ToString() "Resources"
@@ -108,9 +97,11 @@ function Add-XamarinIosImage()
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$True, Position=1)]
+        [ValidateScript({Test-Path $_ -PathType Leaf})]
         [string]$Image,
 	
         [Parameter(Mandatory=$True, Position=2)]
+        [ValidateScript({Test-Path $_ -PathType Leaf})]
         [string]$IosProject,
 
         [Parameter()]

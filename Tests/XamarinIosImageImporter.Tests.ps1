@@ -10,18 +10,11 @@ Describe "XamarinIosImageImporter" {
         AfterEach {
             Remove-Item (Join-Path $TestDrive Sandbox.iOS) -Recurse
         }
-        It "Should not allow *.jpg" {
-            Add-XamarinIosImage image.jpg $csproj 2>&1
-            (Add-XamarinIosImage image.jpg $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 2
-        }
-        It "Should not allow *.gif" {
-            (Add-XamarinIosImage image.gif $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 2
-        }
-        It "Should not allow *.png that is not found" {
-            (Add-XamarinIosImage image.png $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
+        It "Should not allow an image that is not found" {
+            { Add-XamarinIosImage image.png $csproj } | Should Throw
         }
         It "Should not allow *.csproj that is not found" {
-            (Add-XamarinIosImage $image Sandbox.iOS.csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
+            { Add-XamarinIosImage $image Sandbox.iOS.csproj } | Should Throw
         }
         It "Should not allow projects that are not *.csproj" {
             (Add-XamarinIosImage $image (Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath packages.config) 2>&1 | Measure-Object -Line).Lines | Should Be 1

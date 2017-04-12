@@ -10,14 +10,8 @@ Describe "XamarinAndroidImageImporter" {
         AfterEach {
             Remove-Item (Join-Path $TestDrive Sandbox.Android) -Recurse
         }
-        It "Should not allow *.jpg" {
-            (Add-XamarinAndroidImage image.jpg $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
-        }
-        It "Should not allow *.gif" {
-            (Add-XamarinAndroidImage image.gif $csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
-        }
         It "Should not allow *.csproj that is not found" {
-            (Add-XamarinAndroidImage $image Sandbox.Android.csproj 2>&1 | Measure-Object -Line).Lines | Should Be 1
+            { Add-XamarinAndroidImage $image Sandbox.Android.csproj } | Should Throw
         }
         It "Should not allow projects that are not *.csproj" {
             (Add-XamarinAndroidImage $image (Join-Path $TestDrive Sandbox.Android | Join-Path -ChildPath packages.config) 2>&1 | Measure-Object -Line).Lines | Should Be 1
