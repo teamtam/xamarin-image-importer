@@ -41,7 +41,7 @@ function Copy-ImagesToResources()
 
 function Add-ImagesToProject()
 {
-    $projectXml = [xml](Get-Content $AndroidProject)
+    $projectXml = [xml](Get-Content (Resolve-Path $AndroidProject))
     $nsmgr = Get-XmlNamespaceManager $projectXml
     $itemGroup = Get-AndroidResourceItemGroup $projectXml $nsmgr
 
@@ -70,7 +70,7 @@ function Add-ImagesToProject()
         Add-AndroidResource $projectXml $nsmgr $itemGroup $androidImageX3 $AndroidProject
     }
 
-    $projectXml.Save($AndroidProject)
+    $projectXml.Save((Resolve-Path $AndroidProject))
 }
 
 <#

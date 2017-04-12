@@ -22,7 +22,7 @@ function Copy-ImagesToResources()
 
 function Add-ImagesToProject()
 {
-    $projectXml = [xml](Get-Content $IosProject)
+    $projectXml = [xml](Get-Content (Resolve-Path $IosProject))
     $nsmgr = Get-XmlNamespaceManager $projectXml
     $itemGroup = Get-BundleResourceItemGroup $projectXml $nsmgr
 
@@ -36,7 +36,7 @@ function Add-ImagesToProject()
         Add-BundleResource $projectXml $nsmgr $itemGroup $iosImage3 $IosProject
     }
 
-    $projectXml.Save($IosProject)
+    $projectXml.Save((Resolve-Path $IosProject))
 }
 
 <#
