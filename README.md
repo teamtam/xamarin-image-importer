@@ -19,9 +19,10 @@ exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, wh
 `Add-XamarinImages -Images C:\Images -IosProject C:\Source\MyProject.iOS\MyProject.iOS.csproj -AndroidProject C:\Source\MyProject.Droid\MyProject.Droid.csproj -Move -Verbose`
 
 ### More detailed documentation can be found through PowerShell 'Get-Help' after installation
-* `Get-Help Add-XamarinImages`
-* `Get-Help Add-XamarinIosImage`
-* `Get-Help Add-XamarinAndroidImage`
+`Get-Help Add-XamarinImages`
+
+### Sample output
+![Sample output](/sample-output.png)
 
 ## Installation
 
@@ -39,4 +40,4 @@ exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, wh
 * Option A: run as is for the current PowerShell session:  
   `Import-Module .\XamarinImageImporter\XamarinImageImporter.psd1`
 * Option B: install for the current and future PowerShell sessions:  
-  Copy all `*.psm1` and `*.psd1` to a directory called `XamarinImageImporter` under a path defined in `$Env:PSModulePath` - [[more info]](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx)
+  Copy the `XamarinImageImporter` directory to a path defined in `$Env:PSModulePath` - [[more info]](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx)
