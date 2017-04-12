@@ -22,7 +22,7 @@ exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, wh
 `Get-Help Add-XamarinImages`
 
 ### Sample output
-![Sample output](/sample-output.png)
+![Sample output](/sample_output.png)
 
 ## Installation
 
