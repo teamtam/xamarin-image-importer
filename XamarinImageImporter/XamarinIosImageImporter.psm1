@@ -3,30 +3,6 @@ $iosImage1 = $Image
 $iosImage2 = ""
 $iosImage3 = ""
 
-function Test-Parameters()
-{
-    $parametersOk = $True
-
-    if (!($Image.EndsWith(".png")))
-    {
-        $parametersOk = $False
-        Write-Error "$Image is not a .png"
-    }
-
-    if (!($IosProject.EndsWith(".csproj")))
-    {
-        $parametersOk = $False
-        Write-Error "$IosProject is not a .csproj"
-    }
-    else
-    {
-        $iosProjectDirectory = Get-Item (Get-Item $IosProject).DirectoryName
-        $script:iosResourcesDirectory = Join-Path $iosProjectDirectory.ToString() "Resources"
-    }
-
-    $parametersOk
-}
-
 function Copy-ImagesToResources()
 {
     [CmdletBinding()]
@@ -98,20 +74,20 @@ function Add-XamarinIosImage()
     Param(
         [Parameter(Mandatory=$True, Position=1)]
         [ValidateScript({Test-Path $_ -PathType Leaf})]
+        [ValidatePattern("[^\s]+(\.(?i)(png))$")]
         [string]$Image,
 	
         [Parameter(Mandatory=$True, Position=2)]
         [ValidateScript({Test-Path $_ -PathType Leaf})]
+        [ValidatePattern("[^\s]+(\.(?i)(csproj))$")]
         [string]$IosProject,
 
         [Parameter()]
         [switch]$Move
     )
 
-    $parametersOk = Test-Parameters
-    if ($parametersOk)
-    {
-        Copy-ImagesToResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
-        Add-ImagesToProject
-    }
+    $iosProjectDirectory = Get-Item (Get-Item $IosProject).DirectoryName
+    $script:iosResourcesDirectory = Join-Path $iosProjectDirectory.ToString() "Resources"
+    Copy-ImagesToResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    Add-ImagesToProject
 }

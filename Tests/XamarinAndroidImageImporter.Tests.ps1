@@ -14,7 +14,7 @@ Describe "XamarinAndroidImageImporter" {
             { Add-XamarinAndroidImage $image Sandbox.Android.csproj } | Should Throw
         }
         It "Should not allow projects that are not *.csproj" {
-            (Add-XamarinAndroidImage $image (Join-Path $TestDrive Sandbox.Android | Join-Path -ChildPath packages.config) 2>&1 | Measure-Object -Line).Lines | Should Be 1
+            { Add-XamarinAndroidImage $image (Join-Path $TestDrive Sandbox.Android | Join-Path -ChildPath packages.config) } | Should Throw
         }
     }
 

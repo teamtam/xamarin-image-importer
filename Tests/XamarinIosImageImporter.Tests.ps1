@@ -17,7 +17,7 @@ Describe "XamarinIosImageImporter" {
             { Add-XamarinIosImage $image Sandbox.iOS.csproj } | Should Throw
         }
         It "Should not allow projects that are not *.csproj" {
-            (Add-XamarinIosImage $image (Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath packages.config) 2>&1 | Measure-Object -Line).Lines | Should Be 1
+            { Add-XamarinIosImage $image (Join-Path $TestDrive Sandbox.iOS | Join-Path -ChildPath packages.config) } | Should Throw
         }
     }
 

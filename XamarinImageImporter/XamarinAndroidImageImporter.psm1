@@ -6,30 +6,6 @@ $androidImageX1 = ""
 $androidImageX2 = ""
 $androidImageX3 = ""
 
-function Test-Parameters()
-{
-    $parametersOk = $True
-
-    if (!($Image.EndsWith(".png")))
-    {
-        $parametersOk = $False
-        Write-Error "$Image is not a .png"
-    }
-
-    if (!($AndroidProject.EndsWith(".csproj")))
-    {
-        $parametersOk = $False
-        Write-Error "$AndroidProject is not a .csproj"
-    }
-    else
-    {
-        $androidProjectDirectory = Get-Item (Get-Item $AndroidProject).DirectoryName
-        $script:androidResourcesDirectory = Join-Path $androidProjectDirectory.ToString() "Resources"
-    }
-
-    $parametersOk
-}
-
 function Copy-ImagesToResources()
 {
     [CmdletBinding()]
@@ -133,20 +109,20 @@ function Add-XamarinAndroidImage()
     Param(
         [Parameter(Mandatory=$True, Position=1)]
         [ValidateScript({Test-Path $_ -PathType Leaf -IsValid})]
+        [ValidatePattern("[^\s]+(\.(?i)(png))$")]
         [string]$Image,
 	
         [Parameter(Mandatory=$True, Position=2)]
         [ValidateScript({Test-Path $_ -PathType Leaf})]
+        [ValidatePattern("[^\s]+(\.(?i)(csproj))$")]
         [string]$AndroidProject,
 
         [Parameter()]
         [switch]$Move
     )
 
-    $parametersOk = Test-Parameters
-    if ($parametersOk)
-    {
-        Copy-ImagesToResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
-        Add-ImagesToProject
-    }
+    $androidProjectDirectory = Get-Item (Get-Item $AndroidProject).DirectoryName
+    $script:androidResourcesDirectory = Join-Path $androidProjectDirectory.ToString() "Resources"
+    Copy-ImagesToResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    Add-ImagesToProject
 }
