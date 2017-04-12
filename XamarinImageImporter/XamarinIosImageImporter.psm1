@@ -11,13 +11,13 @@ function Copy-ImagesToResources()
         [switch]$Move
     )
 
-    $script:iosImage1 = Copy-Image $Image $iosResourcesDirectory -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage1 = Copy-Image $Image $iosResourcesDirectory -Move:$Move -Verbose:$VerbosePreference
 
     $script:iosImage2 = $Image.Substring(0, $Image.Length - 4) + "@2x.png"
-    $script:iosImage2 = Copy-Image $iosImage2 $iosResourcesDirectory -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage2 = Copy-Image $iosImage2 $iosResourcesDirectory -Move:$Move -Verbose:$VerbosePreference
 
     $script:iosImage3 = $Image.Substring(0, $Image.Length - 4) + "@3x.png"
-    $script:iosImage3 = Copy-Image $iosImage3 $iosResourcesDirectory -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:iosImage3 = Copy-Image $iosImage3 $iosResourcesDirectory -Move:$Move -Verbose:$VerbosePreference
 }
 
 function Add-ImagesToProject()
@@ -88,6 +88,6 @@ function Add-XamarinIosImage()
 
     $iosProjectDirectory = Get-Item (Get-Item $IosProject).DirectoryName
     $script:iosResourcesDirectory = Join-Path $iosProjectDirectory.ToString() "Resources"
-    Copy-ImagesToResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    Copy-ImagesToResources -Move:$Move -Verbose:$VerbosePreference
     Add-ImagesToProject
 }

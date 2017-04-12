@@ -79,11 +79,11 @@ function Add-XamarinImages()
     Foreach-Object {
         if (![string]::IsNullOrEmpty($IosProject))
         {
-            Add-XamarinIosImage $_ $IosProject -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+            Add-XamarinIosImage $_ $IosProject -Move:$Move -Verbose:$VerbosePreference
         }
         if (![string]::IsNullOrEmpty($AndroidProject))
         {
-            Add-XamarinAndroidImage $_ $AndroidProject -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+            Add-XamarinAndroidImage $_ $AndroidProject -Move:$Move -Verbose:$VerbosePreference
         }
         $done.Add($_.BaseName + $_.Extension, $_.BaseName + $_.Extension)
     }
@@ -110,7 +110,7 @@ function Add-XamarinImages()
             }
             if (!$done.ContainsKey($filename))
             {
-                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $AndroidProject -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+                Add-XamarinAndroidImage (Join-Path $_.Directory $filename) $AndroidProject -Move:$Move -Verbose:$VerbosePreference
                 $done.Add($filename, $filename)
             }
         }

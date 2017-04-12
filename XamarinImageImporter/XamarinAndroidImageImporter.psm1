@@ -16,27 +16,27 @@ function Copy-ImagesToResources()
 
     $script:androidImageL = $Image.Substring(0, $Image.Length - 4) + "ldpi.png"
     $androidDirectoryL = Join-Path $androidResourcesDirectory "drawable-ldpi"
-    $script:androidImageL = Copy-ImageAndRename $androidImageL $androidDirectoryL $Image -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:androidImageL = Copy-ImageAndRename $androidImageL $androidDirectoryL $Image -Move:$Move -Verbose:$VerbosePreference
 
     $script:androidImageM = $Image.Substring(0, $Image.Length - 4) + "mdpi.png"
     $androidDirectoryM = Join-Path $androidResourcesDirectory "drawable-mdpi"
-    $script:androidImageM = Copy-ImageAndRename $androidImageM $androidDirectoryM $Image -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:androidImageM = Copy-ImageAndRename $androidImageM $androidDirectoryM $Image -Move:$Move -Verbose:$VerbosePreference
 
     $script:androidImageH = $Image.Substring(0, $Image.Length - 4) + "hdpi.png"
     $androidDirectoryH = Join-Path $androidResourcesDirectory "drawable-hdpi"
-    $script:androidImageH = Copy-ImageAndRename $androidImageH $androidDirectoryH $Image -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:androidImageH = Copy-ImageAndRename $androidImageH $androidDirectoryH $Image -Move:$Move -Verbose:$VerbosePreference
 
     $script:androidImageX1 = $Image.Substring(0, $Image.Length - 4) + "xhdpi.png"
     $androidDirectoryX1 = Join-Path $androidResourcesDirectory "drawable-xhdpi"
-    $script:androidImageX1 = Copy-ImageAndRename $androidImageX1 $androidDirectoryX1 $Image -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:androidImageX1 = Copy-ImageAndRename $androidImageX1 $androidDirectoryX1 $Image -Move:$Move -Verbose:$VerbosePreference
 
     $script:androidImageX2 = $Image.Substring(0, $Image.Length - 4) + "xxhdpi.png"
     $androidDirectoryX2 = Join-Path $androidResourcesDirectory "drawable-xxhdpi"
-    $script:androidImageX2 = Copy-ImageAndRename $androidImageX2 $androidDirectoryX2 $Image -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:androidImageX2 = Copy-ImageAndRename $androidImageX2 $androidDirectoryX2 $Image -Move:$Move -Verbose:$VerbosePreference
 
     $script:androidImageX3 = $Image.Substring(0, $Image.Length - 4) + "xxxhdpi.png"
     $androidDirectoryX3 = Join-Path $androidResourcesDirectory "drawable-xxxhdpi"
-    $script:androidImageX3 = Copy-ImageAndRename $androidImageX3 $androidDirectoryX3 $Image -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    $script:androidImageX3 = Copy-ImageAndRename $androidImageX3 $androidDirectoryX3 $Image -Move:$Move -Verbose:$VerbosePreference
 }
 
 function Add-ImagesToProject()
@@ -123,6 +123,6 @@ function Add-XamarinAndroidImage()
 
     $androidProjectDirectory = Get-Item (Get-Item $AndroidProject).DirectoryName
     $script:androidResourcesDirectory = Join-Path $androidProjectDirectory.ToString() "Resources"
-    Copy-ImagesToResources -Move:$Move -Verbose:($PSBoundParameters['Verbose'] -eq $True)
+    Copy-ImagesToResources -Move:$Move -Verbose:$VerbosePreference
     Add-ImagesToProject
 }
