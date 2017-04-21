@@ -7,6 +7,8 @@ imports them to the .csproj project files so it will be available when viewed in
 exist, `@2x.png` or `@3x.png` variants of the image will be imported for iOS, while `*ldpi.png`, `*mdpi.png`, `*hdpi.png`,
 `*xhdpi.png`, `*xxhdpi.png` and `*xxxhdpi.png` will be imported for Android.
 
+* Blog: [http://teamtam.net/xamarin-image-importer/](http://teamtam.net/xamarin-image-importer/)
+
 ## Usage
 
 ### Run for iOS only with minimal parameters
